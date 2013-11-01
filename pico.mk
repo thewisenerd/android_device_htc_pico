@@ -112,7 +112,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/htc/pico/ramdisk/init.pico.rc:root/init.pico.rc \
     device/htc/pico/ramdisk/ueventd.pico.rc:root/ueventd.pico.rc \
-    device/htc/pico/ramdisk/init.pico.usb.rc:root/init.pico.usb.rc \
+    device/htc/pico/ramdisk/init.pico.usb.rc:root/init.pico.usb.rc
     
 # Camera
 PRODUCT_COPY_FILES += \
@@ -128,7 +128,7 @@ PRODUCT_COPY_FILES += \
     vendor/htc/pico/proprietary/bin/awb_camera:system/bin/awb_camera \
     vendor/htc/pico/proprietary/bin/lsc_camera:system/bin/lsc_camera \
     vendor/htc/pico/proprietary/bin/mm-qcamera-daemon:system/bin/mm-qcamera-daemon \
-    device/htc/pico/prebuilt/etc/media_profiles.xml:system/etc/media_profiles.xml \
+    device/htc/pico/prebuilt/etc/media_profiles.xml:system/etc/media_profiles.xml
     
 # OMX
 PRODUCT_COPY_FILES += \
@@ -139,7 +139,7 @@ PRODUCT_COPY_FILES += \
     vendor/htc/pico/proprietary/lib/libmmosal.so:system/lib/libmmosal.so \
     vendor/htc/pico/proprietary/lib/libmmparser.so:system/lib/libmmparser.so \
     vendor/htc/pico/proprietary/lib/libmmparser_divxdrmlib.so:system/lib/libmmparser_divxdrmlib.so \
-    vendor/htc/pico/proprietary/lib/libdivxdrmdecrypt.so:system/lib/libdivxdrmdecrypt.so \
+    vendor/htc/pico/proprietary/lib/libdivxdrmdecrypt.so:system/lib/libdivxdrmdecrypt.so
     
 # Set usb type
 ADDITIONAL_DEFAULT_PROPERTIES += \
@@ -235,11 +235,11 @@ PRODUCT_COPY_FILES += \
     device/htc/pico/prebuilt/etc/soundimage/srsfx_trumedia_movie.cfg:system/etc/soundimage/srsfx_trumedia_movie.cfg \
     device/htc/pico/prebuilt/etc/soundimage/srsfx_trumedia_voice.cfg:system/etc/soundimage/srsfx_trumedia_voice.cfg \
     device/htc/pico/prebuilt/etc/soundimage/srs_geq10.cfg:system/etc/soundimage/srs_geq10.cfg \
-    device/htc/pico/prebuilt/etc/soundimage/srsfx_trumedia_music.cfg:system/etc/soundimage/srsfx_trumedia_music.cfg \
+    device/htc/pico/prebuilt/etc/soundimage/srsfx_trumedia_music.cfg:system/etc/soundimage/srsfx_trumedia_music.cfg
 
 # Bluetooth
 PRODUCT_COPY_FILES += \
-    vendor/htc/pico/proprietary/etc/firmware/BCM4330B1_002.001.003.0221.0228.hcd:system/etc/firmware/BCM4330B1_002.001.003.0221.0228.hcd
+    device/htc/pico/prebuilt/etc/firmware/BCM4330B1_002.001.003.0221.0228.hcd:system/etc/firmware/BCM4330B1_002.001.003.0221.0228.hcd
 
 # Keylayouts
 PRODUCT_COPY_FILES += \
@@ -258,20 +258,17 @@ PRODUCT_COPY_FILES += \
     device/htc/pico/prebuilt/usr/idc/synaptics-rmi-touchscreen.idc:system/usr/idc/synaptics-rmi-touchscreen.idc
     
 PRODUCT_PROPERTY_OVERRIDES += \
+    ro.setupwizard.enable_bypass=1 \
+    ro.telephony.call_ring.multiple=false \
+    ro.vold.umsdirtyratio=50 \
+    persist.service.zram=1 \
+    ro.zram.default=18 \
     ro.product.camera=pico \
     ro.com.google.locationfeatures=1 \
     ro.com.google.networklocation=1 \
     ro.com.google.gmsversion=2.3_r6 \
-    ro.setupwizard.enable_bypass=1 \
     dalvik.vm.lockprof.threshold=500 \
-    dalvik.vm.dexopt-flags=m=y \
-    ro.telephony.call_ring.multiple=false \
-    ro.vold.umsdirtyratio=20 \
-    persist.service.zram=1 \
-    ro.zram.default=18 \
-    ro.config.ringtone=CyanTone.ogg \
-    ro.config.notification_sound=CyanPing.ogg \
-    ro.config.alarm_alert=CyanAlarm.ogg
+    dalvik.vm.dexopt-flags=m=y
     
 PRODUCT_AAPT_CONFIG := normal mdpi
 PRODUCT_AAPT_PREF_CONFIG := mdpi

@@ -12,7 +12,7 @@ ro.ril.update.acoustic.table = 1
 # Time between scans in seconds. Keep it high to minimize battery drain.
 # This only affects the case in which there are remembered access points,
 # but none are in range.
-wifi.supplicant_scan_interval=180
+wifi.supplicant_scan_interval=300
 wifi.interface=eth0
 wifi.softap.interface=eth0
 

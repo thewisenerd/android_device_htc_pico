@@ -16,6 +16,19 @@ on post-fs-data
     mkdir /data/misc/dhcp 0770 dhcp dhcp
     chown dhcp dhcp /data/misc/dhcp
 
+	# bluetooth power up/down interface
+    chown bluetooth bluetooth /dev/ttyHS0
+    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/type
+    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/state
+    chmod 0660 /sys/class/rfkill/rfkill0/state
+
+    # Bluetooth MAC address path
+    chown bluetooth net_bt_stack /sys/module/htc_bdaddress/parameters/bdaddress
+    setprop ro.bt.bdaddr_path /sys/module/htc_bdaddress/parameters/bdaddress
+
+    # bluetooth car dock pin
+    chown system system /sys/class/switch/dock/bt_pin
+
 on boot
     mount debugfs /sys/kernel/debug /sys/kernel/debug
     
@@ -82,8 +95,8 @@ on boot
     # Enable low memory killer to check file pages
     write /sys/module/lowmemorykiller/parameters/minfile 0,0,0,5120,5632,6144
     write /sys/module/lowmemorykiller/parameters/check_filepages 1
-    
-    # fix for entropy service and some other that failed
+
+	# fix for entropy service and some other that failed
     # Need for NET
     chmod 755 /data/system/appwidgets.xml
     chmod 755 /data/system/entropy.dat
@@ -104,6 +117,12 @@ on boot
     setprop ro.ril.fast.dormancy.rule 1
     setprop ro.ril.fd.scron.timeout 4
     setprop ro.ril.fd.scroff.timeout 3
+
+service hciattach /system/bin/logwrapper /system/bin/brcm_patchram_plus -d --no2bytes --tosleep=50000 --enable_hci --baudrate 3000000 --patchram /etc/firmware/BCM4330B1_002.001.003.0221.0228.hcd --scopcm=0,0,0,0,0,0,0,3,3,0 /dev/ttyHS0
+    user root
+    group bluetooth net_bt_admin
+    disabled
+    oneshot
 
 service p2p_supplicant /system/bin/wpa_supplicant -ieth0 -Dnl80211 -e/data/misc/wifi/entropy.bin -c/data/misc/wifi/wpa_supplicant.conf \
     # we will start as root and wpa_supplicant will switch to user wifi
