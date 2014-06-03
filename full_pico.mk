@@ -25,7 +25,6 @@ DEVICE_PACKAGE_OVERLAYS += device/htc/pico/overlay
 PRODUCT_PACKAGES += \
     copybit.msm7x27a \
     gralloc.msm7x27a \
-    hwcomposer.msm7x27a \
     libgenlock \
     liboverlay \
     libtilerenderer \
@@ -102,6 +101,15 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/prebuilt/etc/media_codecs.xml:/system/etc/media_codecs.xml \
     $(LOCAL_PATH)/prebuilt/etc/media_profiles.xml:/system/etc/media_profiles.xml
+
+# Wifi
+PRODUCT_COPY_FILES += \
+    device/htc/pico/prebuilt/etc/firmware/fw_bcmdhd.bin:system/etc/firmware/fw_bcmdhd.bin \
+    device/htc/pico/prebuilt/etc/firmware/fw_bcmdhd_apsta.bin:system/etc/firmware/fw_bcmdhd_apsta.bin \
+    device/htc/pico/prebuilt/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
+    device/htc/pico/prebuilt/etc/dhcpd/dhcpcd.conf:system/etc/dhcpcd/dhcpcd.conf \
+    device/htc/pico/prebuilt/etc/wifi/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
+    device/htc/pico/prebuilt/etc/wifi/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf
 
 #latinime from f_droid
 PRODUCT_COPY_FILES += \

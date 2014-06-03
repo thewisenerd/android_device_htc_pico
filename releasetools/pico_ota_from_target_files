@@ -339,7 +339,7 @@ def CopySystemFiles(input_zip, output_zip=None,
       else:
         info2 = copy.copy(info)
         if basefilename in extras_list:
-          fn = info2.filename = "extras/" + basefilename
+          continue
         else:
           fn = info2.filename = "system/" + basefilename
         if substitute and fn in substitute and substitute[fn] is None:
