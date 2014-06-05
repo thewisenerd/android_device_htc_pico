@@ -165,6 +165,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.heapminfree=512k \
     dalvik.vm.heapmaxfree=2m
 
+#Disable mobile data at first boot
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.com.android.mobiledata=false \
+    ro.com.android.dataroaming=false
+
 # Set missing property
 PRODUCT_PROPERTY_OVERRIDES += \
     debug.egl.recordable.rgba8888=1
