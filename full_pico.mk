@@ -42,7 +42,6 @@ PRODUCT_PACKAGES += \
 # Other
 PRODUCT_PACKAGES += \
     dexpreopt \
-    libwebcore \
     lights.pico \
     gps.msm7x27a \
     librpc \
