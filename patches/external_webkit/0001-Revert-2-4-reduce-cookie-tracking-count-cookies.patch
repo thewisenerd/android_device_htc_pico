@@ -1,0 +1,40 @@
+From f076980f6c7b5bd3246f73adf78361e07953bfc7 Mon Sep 17 00:00:00 2001
+From: Vineeth Raj <contact.twn@opmbx.org>
+Date: Tue, 2 Sep 2014 03:10:30 +0530
+Subject: [PATCH] Revert "[2/4] reduce cookie tracking: count cookies"
+
+this includes 6 commits. Let's not add this here.
+---
+ Source/WebKit/android/jni/CookieManager.cpp | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/Source/WebKit/android/jni/CookieManager.cpp b/Source/WebKit/android/jni/CookieManager.cpp
+index 806182d..6608e33 100644
+--- a/Source/WebKit/android/jni/CookieManager.cpp
++++ b/Source/WebKit/android/jni/CookieManager.cpp
+@@ -63,14 +63,6 @@ static bool hasCookies(JNIEnv*, jobject, jboolean privateBrowsing)
+     return WebCookieJar::get(privateBrowsing)->getNumCookiesInDatabase() > 0;
+ }
+ 
+-static int countCookies(JNIEnv*, jobject)
+-{
+-    int cookieCount = 0;
+-    cookieCount += WebCookieJar::get(false)->cookieStore()->GetCookieMonster()->numCookies();
+-    cookieCount += WebCookieJar::get(true)->cookieStore()->GetCookieMonster()->numCookies();
+-    return cookieCount;
+-}
+-
+ static void removeAllCookie(JNIEnv*, jobject)
+ {
+     WebCookieJar::get(false)->cookieStore()->GetCookieMonster()->DeleteAll(true);
+@@ -154,7 +146,6 @@ static JNINativeMethod gCookieManagerMethods[] = {
+     { "nativeFlushCookieStore", "()V", (void*) flushCookieStore },
+     { "nativeAcceptFileSchemeCookies", "()Z", (void*) acceptFileSchemeCookies },
+     { "nativeSetAcceptFileSchemeCookies", "(Z)V", (void*) setAcceptFileSchemeCookies },
+-    { "nativeCountCookies", "()I", (void*) countCookies },
+ };
+ 
+ int registerCookieManager(JNIEnv* env)
+-- 
+1.9.1
+
