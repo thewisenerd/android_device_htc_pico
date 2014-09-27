@@ -428,8 +428,8 @@ AudioStreamIn* AudioHardware::openInputStream(
         uint32_t devices, int *format, uint32_t *channels, uint32_t *sampleRate, status_t *status,
         AudioSystem::audio_in_acoustics acoustic_flags)
 {
-    ALOGD("AudioHardware::openInputStream devices %x format %d channels %d samplerate %d in_p=%x lin_p=%x in_v=%x lin_v=%x",
-        devices, *format, *channels, *sampleRate, AUDIO_DEVICE_IN_VOICE_CALL, AudioSystem::DEVICE_IN_VOICE_CALL, AUDIO_DEVICE_IN_COMMUNICATION, AudioSystem::DEVICE_IN_COMMUNICATION);
+    ALOGD("AudioHardware::openInputStream devices %x format %d channels %d samplerate %d",
+        devices, *format, *channels, *sampleRate);
 
     // check for valid input source
     if (!AudioSystem::isInputDevice((AudioSystem::audio_devices)devices)) {
@@ -438,7 +438,7 @@ AudioStreamIn* AudioHardware::openInputStream(
 
     mLock.lock();
 #ifdef QCOM_VOIP_ENABLED
-    if(devices == AUDIO_DEVICE_IN_COMMUNICATION) {
+    if((devices == AUDIO_DEVICE_IN_COMMUNICATION) && (*sampleRate == 8000)) {
         ALOGV("Create Audio stream Voip \n");
         AudioStreamInVoip* inVoip = new AudioStreamInVoip();
         status_t lStatus = NO_ERROR;
@@ -1637,14 +1637,12 @@ status_t AudioHardware::AudioStreamInVoip::set(
 {
     ALOGD("AudioStreamInVoip::set devices = %u format = %x pChannels = %u Rate = %u \n",
          devices, *pFormat, *pChannels, *pRate);
-
-    mHardware = hw;
-
     if ((pFormat == 0) || BAD_INDEX == hw->getMvsMode(*pFormat, *pRate)) {
         ALOGE("Audio Format (%x) not supported \n",*pFormat);
         return BAD_VALUE;
     }
 
+    if (*pFormat == AudioSystem::PCM_16_BIT){
     if (pRate == 0) {
         return BAD_VALUE;
     }
@@ -1670,6 +1668,9 @@ status_t AudioHardware::AudioStreamInVoip::set(
        ALOGE(" unsupported sample rate");
        return -1;
     }
+
+    }
+    mHardware = hw;
 
     ALOGD("AudioStreamInVoip::set(%d, %d, %u)", *pFormat, *pChannels, *pRate);
 
@@ -2193,40 +2194,50 @@ status_t AudioHardware::AudioStreamOutDirect::set(
     ALOGD("AudioStreamOutDirect::set  lFormat = %x lChannels= %u lRate = %u\n",
         lFormat, lChannels, lRate );
 
-    mHardware = hw;
-
-    // fix up defaults
-    if (lFormat == 0) lFormat = format();
-    if (lChannels == 0) lChannels = channels();
-    if (lRate == 0) lRate = sampleRate();
-
-    // check values
-    if ((lFormat != format()) ||
-        (lChannels != channels()) ||
-        (lRate != sampleRate())) {
-        if (pFormat) *pFormat = format();
-        if (pChannels) *pChannels = channels();
-        if (pRate) *pRate = sampleRate();
-        ALOGE("  AudioStreamOutDirect::set return bad values\n");
+    if ((pFormat == 0) || BAD_INDEX == hw->getMvsMode(*pFormat, lRate)) {
+        ALOGE("Audio Format (%x) not supported \n",*pFormat);
         return BAD_VALUE;
     }
 
-    if (pFormat) *pFormat = lFormat;
-    if (pChannels) *pChannels = lChannels;
-    if (pRate) *pRate = lRate;
 
-    mDevices = devices;
+    if (*pFormat == AUDIO_FORMAT_PCM_16_BIT){
+        // fix up defaults
+        if (lFormat == 0) lFormat = format();
+        if (lChannels == 0) lChannels = channels();
+        if (lRate == 0) lRate = sampleRate();
+
+        // check values
+        if ((lFormat != format()) ||
+            (lChannels != channels()) ||
+			(lRate != sampleRate())) {
+            if (pFormat) *pFormat = format();
+            if (pChannels) *pChannels = channels();
+			if (pRate) *pRate = sampleRate();
+            ALOGE("  AudioStreamOutDirect::set return bad values\n");
+            return BAD_VALUE;
+        }
+
+        if (pFormat) *pFormat = lFormat;
+        if (pChannels) *pChannels = lChannels;
+        if (pRate) *pRate = lRate;
+
+        if(lRate == AUDIO_HW_VOIP_SAMPLERATE_8K) {
+            mBufferSize = AUDIO_HW_VOIP_BUFFERSIZE_8K;
+        } else if(lRate== AUDIO_HW_VOIP_SAMPLERATE_16K) {
+            mBufferSize = AUDIO_HW_VOIP_BUFFERSIZE_16K;
+        } else {
+            ALOGE("  AudioStreamOutDirect::set return bad values\n");
+            return BAD_VALUE;
+        }
+    }
+
+    mHardware = hw;
+
+    // check values
+    mFormat =  lFormat;
     mChannels = lChannels;
     mSampleRate = lRate;
 
-    if(mSampleRate == AUDIO_HW_VOIP_SAMPLERATE_8K) {
-        mBufferSize = AUDIO_HW_VOIP_BUFFERSIZE_8K;
-    } else if(mSampleRate == AUDIO_HW_VOIP_SAMPLERATE_16K) {
-        mBufferSize = AUDIO_HW_VOIP_BUFFERSIZE_16K;
-    } else {
-        ALOGE("  AudioStreamOutDirect::set return bad values\n");
-        return BAD_VALUE;
-    }
 
     mDevices = devices;
     mHardware->mVoipOutActive = true;
@@ -2483,10 +2494,10 @@ status_t AudioHardware::AudioStreamInMSM72xx::set(
 
     if ((pFormat == 0) ||
         ((*pFormat != AUDIO_HW_IN_FORMAT) &&
-         (*pFormat != AUDIO_FORMAT_AMR_NB) &&
-         (*pFormat != AUDIO_FORMAT_EVRC) &&
-         (*pFormat != AUDIO_FORMAT_QCELP) &&
-         (*pFormat != AUDIO_FORMAT_AAC)))
+         (*pFormat != AudioSystem::AMR_NB) &&
+         (*pFormat != AudioSystem::EVRC) &&
+         (*pFormat != AudioSystem::QCELP) &&
+         (*pFormat != AudioSystem::AAC)))
     {
         *pFormat = AUDIO_HW_IN_FORMAT;
         ALOGE("audio format bad value");
@@ -2576,9 +2587,9 @@ status_t AudioHardware::AudioStreamInMSM72xx::set(
     mSampleRate = config.sample_rate;
     mBufferSize = config.buffer_size;
     }
-    else if( (*pFormat == AUDIO_FORMAT_AMR_NB) ||
-             (*pFormat == AUDIO_FORMAT_EVRC) ||
-             (*pFormat == AUDIO_FORMAT_QCELP))
+    else if( (*pFormat == AudioSystem::AMR_NB) ||
+             (*pFormat == AudioSystem::EVRC) ||
+             (*pFormat == AudioSystem::QCELP))
            {
 
       // open vocie memo input device
@@ -2659,7 +2670,7 @@ status_t AudioHardware::AudioStreamInMSM72xx::set(
           gcfg.max_rate = RPC_VOC_1_RATE; // Max rate (Fixed frame)
           gcfg.min_rate = RPC_VOC_1_RATE; // Min rate (Fixed frame length)
           gcfg.frame_format = RPC_VOC_PB_NATIVE_QCP;
-          mFormat = AUDIO_FORMAT_QCELP;
+          mFormat = AudioSystem::QCELP;
           mBufferSize = 350;
           break;
         }
@@ -3031,7 +3042,8 @@ void* AudioHardware::AudioSessionOutLPA::memBufferAlloc(int nSize, int32_t *ion_
 
     alloc_data.len =   nSize;
     alloc_data.align = 0x1000;
-    alloc_data.flags = ION_HEAP(ION_AUDIO_HEAP_ID);
+    alloc_data.heap_mask = ION_HEAP(ION_AUDIO_HEAP_ID);
+    alloc_data.flags = 0;
     int rc = ioctl(ionfd, ION_IOC_ALLOC, &alloc_data);
     if (rc) {
         ALOGE("ION_IOC_ALLOC ioctl failed\n");

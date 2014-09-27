@@ -311,8 +311,7 @@ status_t AudioHardware::initCheck()
     return mInit ? NO_ERROR : NO_INIT;
 }
 
-AudioStreamOut* AudioHardware::openOutputStream(uint32_t devices, int *format, uint32_t *channels,
-        uint32_t *sampleRate, status_t *status)
+AudioStreamOut* AudioHardware::openOutputStream(uint32_t devices, int *format, uint32_t *channels, uint32_t *sampleRate, status_t *status)
 {
     audio_output_flags_t flags = static_cast<audio_output_flags_t> (*status);
     ALOGD("openOutputStream: devices = %u format = %x channels = %u sampleRate = %u flags %x\n",
@@ -354,8 +353,8 @@ AudioStreamOut* AudioHardware::openOutputStream(uint32_t devices, int *format, u
                 }
             }
             else {
-                mDirectOutrefCnt++;
-                ALOGE(" \n AudioHardware::AudioStreamOutDirect is already open refcnt %d",mDirectOutrefCnt);
+               mDirectOutrefCnt++;
+                ALOGE(" \n AudioHardware::AudioStreamOutDirect is already open refCnt %d", mDirectOutrefCnt);
             }
             return mDirectOutput;
         }
@@ -363,7 +362,7 @@ AudioStreamOut* AudioHardware::openOutputStream(uint32_t devices, int *format, u
 #endif /*QCOM_VOIP_ENABLED*/
 	    if (flags & AUDIO_OUTPUT_FLAG_LPA) {
 			status_t err = BAD_VALUE;
-#if 0
+
             if (mOutput) {
                 if (status) {
                   *status = INVALID_OPERATION;
@@ -371,7 +370,6 @@ AudioStreamOut* AudioHardware::openOutputStream(uint32_t devices, int *format, u
                 ALOGE(" AudioHardware::openOutputStream Only one output stream allowed \n");
                 return 0;
             }
-#endif
 
             // create new output LPA stream
             AudioSessionOutLPA* out = new AudioSessionOutLPA(this, devices, *format, *channels,*sampleRate,0,&err);
@@ -384,7 +382,7 @@ AudioStreamOut* AudioHardware::openOutputStream(uint32_t devices, int *format, u
         return mOutputLPA;
 
         } else {
-#if 0
+
             ALOGV(" AudioHardware::openOutputStream AudioStreamOutMSM72xx output stream \n");
             // only one output stream allowed
             if (mOutput) {
@@ -394,7 +392,6 @@ AudioStreamOut* AudioHardware::openOutputStream(uint32_t devices, int *format, u
                 ALOGE(" AudioHardware::openOutputStream Only one output stream allowed \n");
                 return 0;
             }
-#endif
 
             // create new output stream
             AudioStreamOutMSM72xx* out = new AudioStreamOutMSM72xx();
@@ -461,7 +458,7 @@ AudioStreamIn* AudioHardware::openInputStream(
 
     mLock.lock();
 #ifdef QCOM_VOIP_ENABLED
-    if(devices == AudioSystem::DEVICE_IN_COMMUNICATION) {
+    if(devices == AudioSystem::DEVICE_IN_COMMUNICATION && (*sampleRate == 8000)) {
         ALOGV("Create Audio stream Voip \n");
         AudioStreamInVoip* inVoip = new AudioStreamInVoip();
         status_t lStatus = NO_ERROR;
@@ -586,7 +583,6 @@ status_t AudioHardware::setParameters(const String8& keyValuePairs)
     AudioParameter param = AudioParameter(keyValuePairs);
     String8 value;
     String8 key;
-
     const char BT_NREC_KEY[] = "bt_headset_nrec";
     const char BT_NAME_KEY[] = "bt_headset_name";
     const char BT_NREC_VALUE_ON[] = "on";
@@ -1393,7 +1389,7 @@ static int msm72xx_enable_postproc(bool state)
     int fd;
     int device_id=0;
 
-    char postProc[128];
+    char postProc[PROPERTY_VALUE_MAX];
     property_get("audio.legacy.postproc",postProc,"0");
 
     if(!(strcmp("true",postProc) == 0)){
@@ -1649,9 +1645,13 @@ status_t AudioHardware::setVoiceVolume(float v)
         v = 1.0;
     }
 
-    int vol = lrint(v * 7.0);
+    // Added 0.4 to current volume, as in voice call Mute cannot be set as minimum volume(0.00)
+    // setting Rx volume level as 2 for minimum and 7 as max level.
+    v = 0.4 + v;
+
+    int vol = lrint(v * 5.0);
     ALOGD("setVoiceVolume(%f)\n", v);
-    ALOGI("Setting in-call volume to %d (available range is 0 to 7)\n", vol);
+    ALOGI("Setting in-call volume to %d (available range is 2 to 7)\n", vol);
 
     if ((mCurSndDevice != -1) && ((mCurSndDevice == SND_DEVICE_TTY_HEADSET) || (mCurSndDevice == SND_DEVICE_TTY_VCO)))
     {
@@ -2725,7 +2725,7 @@ status_t AudioHardware::AudioStreamOutMSM72xx::getRenderPosition(uint32_t *dspFr
 #ifdef QCOM_VOIP_ENABLED
 AudioHardware::AudioStreamOutDirect::AudioStreamOutDirect() :
     mHardware(0), mFd(-1), mStartCount(0), mRetryCount(0), mStandby(true), mDevices(0),mChannels(AudioSystem::CHANNEL_OUT_MONO),
-    mSampleRate(AUDIO_HW_VOIP_SAMPLERATE_8K), mBufferSize(AUDIO_HW_VOIP_BUFFERSIZE_8K), mFormat(AudioSystem::PCM_16_BIT)
+    mSampleRate(AUDIO_HW_VOIP_SAMPLERATE_8K), mBufferSize(AUDIO_HW_VOIP_BUFFERSIZE_8K), mFormat(AUDIO_FORMAT_PCM_16_BIT)
 {
 }
 
@@ -2745,7 +2745,7 @@ status_t AudioHardware::AudioStreamOutDirect::set(
     }
 
 
-    if (*pFormat == AudioSystem::PCM_16_BIT){
+    if (*pFormat == AUDIO_FORMAT_PCM_16_BIT){
         // fix up defaults
         if (lFormat == 0) lFormat = format();
         if (lChannels == 0) lChannels = channels();
@@ -2858,7 +2858,7 @@ ssize_t AudioHardware::AudioStreamOutDirect::write(const void* buffer, size_t by
     }
     struct msm_audio_mvs_frame audio_mvs_frame;
     memset(&audio_mvs_frame, 0, sizeof(audio_mvs_frame));
-    if (mFormat == AudioSystem::PCM_16_BIT) {
+    if (mFormat == AUDIO_FORMAT_PCM_16_BIT) {
         audio_mvs_frame.frame_type = 0;
         while (count) {
             audio_mvs_frame.len = mBufferSize;
@@ -3248,7 +3248,7 @@ status_t AudioHardware::AudioStreamInMSM72xx::set(
       ALOGV("After set dtx_enable = 0x%8x\n",gcfg.dtx_enable);
       ALOGV("After set data_req_ms = 0x%8x\n",gcfg.data_req_ms);
     }
-    else if(*pFormat == AudioSystem::AAC) {
+    else if(*pFormat == AUDIO_FORMAT_AAC) {
       // open AAC input device
                status = ::open(PCM_IN_DEVICE, O_RDWR);
                if (status < 0) {
@@ -3671,7 +3671,8 @@ void* AudioHardware::AudioSessionOutLPA::memBufferAlloc(int nSize, int32_t *ion_
 
     alloc_data.len =   nSize;
     alloc_data.align = 0x1000;
-    alloc_data.flags = ION_HEAP(ION_AUDIO_HEAP_ID);
+    alloc_data.heap_mask = ION_HEAP(ION_AUDIO_HEAP_ID);
+    alloc_data.flags = 0;
     int rc = ioctl(ionfd, ION_IOC_ALLOC, &alloc_data);
     if (rc) {
         ALOGE("ION_IOC_ALLOC ioctl failed\n");
@@ -4200,7 +4201,7 @@ ssize_t AudioHardware::AudioStreamInMSM72xx::read( void* buffer, ssize_t bytes)
 
     // Resetting the bytes value, to return the appropriate read value
     bytes = 0;
-    if (mFormat == AudioSystem::AAC)
+    if (mFormat == AUDIO_FORMAT_AAC)
     {
         *((uint32_t*)recogPtr) = 0x51434F4D ;// ('Q','C','O', 'M') Number to identify format as AAC by higher layers
         recogPtr++;
@@ -4211,7 +4212,7 @@ ssize_t AudioHardware::AudioStreamInMSM72xx::read( void* buffer, ssize_t bytes)
     }
     while (count > 0) {
 
-        if (mFormat == AudioSystem::AAC) {
+        if (mFormat == AUDIO_FORMAT_AAC) {
             frameSizePtr = (uint16_t *)p;
             p += sizeof(uint16_t);
             if(!(count > 2)) break;
@@ -4224,7 +4225,7 @@ ssize_t AudioHardware::AudioStreamInMSM72xx::read( void* buffer, ssize_t bytes)
             p += bytesRead;
             bytes += bytesRead;
 
-            if (mFormat == AudioSystem::AAC){
+            if (mFormat == AUDIO_FORMAT_AAC){
                 *frameSizePtr =  bytesRead;
                 (*frameCountPtr)++;
             }
@@ -4246,7 +4247,7 @@ ssize_t AudioHardware::AudioStreamInMSM72xx::read( void* buffer, ssize_t bytes)
             ALOGW("EAGAIN - retrying");
         }
     }
-    if (mFormat == AudioSystem::AAC)
+    if (mFormat == AUDIO_FORMAT_AAC)
          return aac_framesize;
 
     return bytes;
