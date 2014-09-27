@@ -77,14 +77,13 @@ debug.egl.hw=1
 ro.hw_plat = 7x27a
 debug.gralloc.map_fb_memory=1
 ro.max.fling_velocity = 4000
-debug.qctwa.statusbar = 1
-debug.qctwa.preservebuf = 1
 debug.qc.hardware = true
-debug.hwui.render_dirty_regions = false
 debug.hwc.dynThreshold = 1.9
 debug.fb.rgb565 = 0
 debug.gr.swapinterval=1
 debug.egl.swapinterval=1
+debug.composition.type=dyn
+debug.composition.7x25a.type=dyn
 
 # Video Acceleration
 video.accelerate.hw = 1
