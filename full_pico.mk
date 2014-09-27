@@ -155,6 +155,16 @@ PRODUCT_PROPERTY_OVERRIDES += \
     debug.egl.hw=1 \
     debug.gr.numframebuffers=3
 
+#Dalvik VM heap configuration for 512 MB device
+PRODUCT_PROPERTY_OVERRIDES += \
+    dalvik.vm.dexopt-flags=v=a,o=v,m=y,u=y \
+    dalvik.vm.heapstartsize=5m \
+    dalvik.vm.heapgrowthlimit=48m \
+    dalvik.vm.heapsize=64m \
+    dalvik.vm.heaptargetutilization=0.25 \
+    dalvik.vm.heapminfree=512k \
+    dalvik.vm.heapmaxfree=2m
+
 # Set missing property
 PRODUCT_PROPERTY_OVERRIDES += \
     debug.egl.recordable.rgba8888=1
