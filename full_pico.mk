@@ -27,6 +27,7 @@ DEVICE_PACKAGE_OVERLAYS += device/htc/pico/overlay
 PRODUCT_PACKAGES += \
     copybit.msm7x27a \
     gralloc.msm7x27a \
+    hwcomposer.msm7x27a \
     libgenlock \
     liboverlay \
     libtilerenderer \
