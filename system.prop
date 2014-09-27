@@ -121,15 +121,12 @@ media.stagefright.enable-meta = false
 persist.sys.usb.config = mtp,adb
 
 # Dalvik
-dalvik.vm.heapsize = 64m
-dalvik.vm.checkjni = 0
 dalvik.vm.checkjni = false
 dalvik.vm.dexopt-data-only = 1
 dalvik.vm.dexopt-flags = v=a,o=v,m=y,u=y
 dalvik.vm.execution-mode = int:jit
 dalvik.vm.verify-bytecode = false
 dalvik.vm.lockprof.threshold = 500
-dalvik.vm.heaptargetutilization = 0.25
 dalvik.vm.debug.alloc = 0
 dalvik.vm.jit.codecachesize = 0
 

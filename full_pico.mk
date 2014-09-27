@@ -40,7 +40,8 @@ PRODUCT_PACKAGES += \
     audio.a2dp.default \
     audio.usb.default \
     audio_policy.conf \
-    libaudioutils
+    libaudioutils \
+    libaudio-resampler
 
 # Other
 PRODUCT_PACKAGES += \
@@ -61,7 +62,6 @@ PRODUCT_PACKAGES += \
 
 # Video decoding
 PRODUCT_PACKAGES += \
-    libmm-omxcore \
     libstagefrighthw \
     libOmxCore \
     libdashplayer
@@ -162,7 +162,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.heapstartsize=5m \
     dalvik.vm.heapgrowthlimit=48m \
     dalvik.vm.heapsize=64m \
-    dalvik.vm.heaptargetutilization=0.25 \
+    dalvik.vm.heaptargetutilization=0.75 \
     dalvik.vm.heapminfree=512k \
     dalvik.vm.heapmaxfree=2m
 
