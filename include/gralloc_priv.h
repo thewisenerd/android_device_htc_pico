@@ -1,1 +1,1 @@
-#include "../../../../hardware/qcom/display-legacy/libgralloc/gralloc_priv.h"
+#include "../../../../hardware/qcom/display-caf/libgralloc/gralloc_priv.h"

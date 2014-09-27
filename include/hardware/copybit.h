@@ -1,1 +1,1 @@
-#include "../../../../../hardware/qcom/display-legacy/libcopybit/copybit.h"
+#include "../../../../../hardware/qcom/display-caf/libcopybit/copybit.h"
