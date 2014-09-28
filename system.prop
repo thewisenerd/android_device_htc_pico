@@ -52,7 +52,6 @@ view.scroll_friction = 0.008
 # The OpenGL ES API level that is natively supported by this device.
 # This is a 16.16 fixed point number
 ro.opengles.version = 131072
-ro.opengles.surface.rgb565 = true
 
 # For no auto focus devices
 ro.workaround.noautofocus = 1

@@ -18,7 +18,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product $(SRC_TARGET_DIR)/product/locales_full.mk)
 
 # Call in vendor
-$(call inherit-product, vendor/htc/pico/vendor_pico.mk)
+$(call inherit-product, vendor/htc/pico/vendor_blobs.mk)
 
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += device/htc/pico/overlay
