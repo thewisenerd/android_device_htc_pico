@@ -1,16 +1,16 @@
 diff --git a/core/tasks/kernel.mk b/core/tasks/kernel.mk
-index b09e5d1..a214b51 100644
+index d27b6ba..7d3d2b9 100644
 --- a/core/tasks/kernel.mk
 +++ b/core/tasks/kernel.mk
-@@ -141,15 +141,7 @@ ifeq ($(TARGET_ARCH),arm)
+@@ -143,15 +143,7 @@ ifeq ($(TARGET_ARCH),arm)
          endif
        endif
      endif
 -    ifneq ($(TARGET_KERNEL_CUSTOM_TOOLCHAIN),)
 -        ifeq ($(HOST_OS),darwin)
--            ARM_CROSS_COMPILE:=CROSS_COMPILE="$(ccache) $(ANDROID_BUILD_TOP)/prebuilt/darwin-x86/toolchain/$(TARGET_KERNEL_CUSTOM_TOOLCHAIN)/bin/arm-eabi-"
+-            ARM_CROSS_COMPILE:=CROSS_COMPILE="$(ccache) $(ANDROID_BUILD_TOP)/prebuilts/gcc/darwin-x86/arm/$(TARGET_KERNEL_CUSTOM_TOOLCHAIN)/bin/arm-eabi-"
 -        else
--            ARM_CROSS_COMPILE:=CROSS_COMPILE="$(ccache) $(ANDROID_BUILD_TOP)/prebuilt/linux-x86/toolchain/$(TARGET_KERNEL_CUSTOM_TOOLCHAIN)/bin/arm-eabi-"
+-            ARM_CROSS_COMPILE:=CROSS_COMPILE="$(ccache) $(ANDROID_BUILD_TOP)/prebuilts/gcc/linux-x86/arm/$(TARGET_KERNEL_CUSTOM_TOOLCHAIN)/bin/arm-eabi-"
 -        endif
 -    else
 -        ARM_CROSS_COMPILE:=CROSS_COMPILE="$(ccache) $(ARM_EABI_TOOLCHAIN)/arm-eabi-"
