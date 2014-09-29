@@ -1,0 +1,30 @@
+From b751445d27fe99dee5083bbd72374a0a51cd6de8 Mon Sep 17 00:00:00 2001
+From: Vineeth Raj <contact.twn@opmbx.org>
+Date: Wed, 10 Sep 2014 01:29:43 +0530
+Subject: [PATCH] products/: add pico defines
+
+Change-Id: I38d62dfc15f3111d5ce61c943c9f0c9bcb49b890
+---
+ products/AndroidProducts.mk | 3 +++
+ products/pa_pico.mk         | 1 +
+ 2 files changed, 4 insertions(+)
+ create mode 100644 products/pa_pico.mk
+
+diff --git a/products/AndroidProducts.mk b/products/AndroidProducts.mk
+index 4538212..48893cc 100644
+--- a/products/AndroidProducts.mk
++++ b/products/AndroidProducts.mk
+@@ -231,3 +231,6 @@ endif
+ ifeq (pa_yuga,$(TARGET_PRODUCT))
+     PRODUCT_MAKEFILES += $(LOCAL_DIR)/pa_yuga.mk
+ endif
++ifeq (pa_pico,$(TARGET_PRODUCT))
++    PRODUCT_MAKEFILES += $(LOCAL_DIR)/pa_pico.mk
++endif
+diff --git a/products/pa_pico.mk b/products/pa_pico.mk
+new file mode 100644
+index 0000000..b764fe0
+--- /dev/null
++++ b/products/pa_pico.mk
+@@ -0,0 +1 @@
++$(call inherit-product, device/htc/pico/pico.mk)
