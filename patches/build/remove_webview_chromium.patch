@@ -1,0 +1,40 @@
+From 075a406c805b721bc899f577c39b19693c72e865 Mon Sep 17 00:00:00 2001
+From: Vineeth Raj <contact.twn@opmbx.org>
+Date: Tue, 9 Sep 2014 07:21:17 +0530
+Subject: [PATCH] Remove webviewchromium from bootclasspath
+
+This caused errors when booting, causing the telephony-msim to not
+load, ultimately causing FC's.
+
+As we aren't going to compile chromium_org, we will remove this,
+for now.
+
+Change-Id: I689298cb8e70ec85ebeb33a907cd00671bd57fc5
+---
+ target/product/core_base.mk    | 2 +-
+ target/product/core_minimal.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/target/product/core_base.mk b/target/product/core_base.mk
+index 14c350a..816eaa0 100644
+--- a/target/product/core_base.mk
++++ b/target/product/core_base.mk
+@@ -68,4 +68,4 @@ PRODUCT_PACKAGES += \
+ 
+ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_minimal.mk)
+ # Override the PRODUCT_BOOT_JARS set in core_minimal.mk
+-PRODUCT_BOOT_JARS := core:conscrypt:okhttp:core-junit:bouncycastle:ext:framework:framework2:telephony-common:voip-common:mms-common:android.policy:services:apache-xml:webviewchromium:telephony-msim
++PRODUCT_BOOT_JARS := core:conscrypt:okhttp:core-junit:bouncycastle:ext:framework:framework2:telephony-common:voip-common:mms-common:android.policy:services:apache-xml:telephony-msim
+diff --git a/target/product/core_minimal.mk b/target/product/core_minimal.mk
+index a149556..0836f75 100644
+--- a/target/product/core_minimal.mk
++++ b/target/product/core_minimal.mk
+@@ -59,7 +59,7 @@ PRODUCT_PACKAGES += \
+     sensorservice \
+     uiautomator
+ 
+-PRODUCT_BOOT_JARS := core:conscrypt:okhttp:core-junit:bouncycastle:ext:framework:framework2:android.policy:services:apache-xml:webviewchromium
++PRODUCT_BOOT_JARS := core:conscrypt:okhttp:core-junit:bouncycastle:ext:framework:framework2:android.policy:services:apache-xml
+ 
+ PRODUCT_RUNTIMES := runtime_libdvm_default
+ PRODUCT_RUNTIMES += runtime_libart

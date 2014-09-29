@@ -1,0 +1,24 @@
+From a7bef2e55060d3043d0f66f4d8f76e374aced4df Mon Sep 17 00:00:00 2001
+From: Vineeth Raj <contact.twn@opmbx.org>
+Date: Tue, 9 Sep 2014 07:23:05 +0530
+Subject: [PATCH] remove auditd from compiling.
+
+this causes logcat spam, me hate.
+
+Change-Id: I1eb1b39cddee058ac0fcbe4687f8c3c7726cc7d8
+---
+ target/product/embedded.mk | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/target/product/embedded.mk b/target/product/embedded.mk
+index 33c9918..11e02ae 100644
+--- a/target/product/embedded.mk
++++ b/target/product/embedded.mk
+@@ -69,7 +69,6 @@ PRODUCT_PACKAGES += \
+ 
+ # SELinux packages
+ PRODUCT_PACKAGES += \
+-    auditd \
+     sepolicy \
+     file_contexts \
+     seapp_contexts \

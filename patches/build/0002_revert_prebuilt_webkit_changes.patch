@@ -1,0 +1,73 @@
+From 938e53adfa26a1f00680d22ddab59665198c964b Mon Sep 17 00:00:00 2001
+From: Vineeth Raj <contact.twn@opmbx.org>
+Date: Wed, 3 Sep 2014 23:00:22 +0530
+Subject: [PATCH] Revert "build: Add chromium prebuilt support to envsetup.sh
+ && The core Makefile"
+
+This reverts commit 99242ccdd1f77f3734bb45a0adb82471681d0930.
+---
+ core/Makefile |  6 ------
+ envsetup.sh   | 22 ----------------------
+ 2 files changed, 28 deletions(-)
+
+diff --git a/core/Makefile b/core/Makefile
+index a19773b..78b6dcf 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -1448,12 +1448,6 @@ ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
+ endif
+ 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(CUSTOM_TARGET_PACKAGE)
+ 	$(hide) $(MD5SUM) $(CUSTOM_TARGET_PACKAGE) > $(CUSTOM_TARGET_PACKAGE).md5
+-ifeq ($(USE_PREBUILT_CHROMIUM),1)
+-ifneq ($(PRODUCT_PREBUILT_WEBVIEWCHROMIUM),yes)
+-	@echo "Running Chromium prebuilt setup script..."
+-	$(hide) . $(TOPDIR)vendor/pa/utils/chromium_prebuilt.sh $(TOP)
+-endif
+-endif
+ 	@echo -e ${PRT_CPL}"Package complete: $(CUSTOM_TARGET_PACKAGE)"${CL_RST}
+ 
+ # -----------------------------------------------------------------
+diff --git a/envsetup.sh b/envsetup.sh
+index f4c9ef1..6dcd39b 100644
+--- a/envsetup.sh
++++ b/envsetup.sh
+@@ -525,18 +525,10 @@ function lunch()
+ 
+     echo
+ 
+-    if [[ $USE_PREBUILT_CHROMIUM -eq 1 ]]; then
+-        chromium_prebuilt
+-    else
+-        # Unset flag in case user opts out later on
+-        export PRODUCT_PREBUILT_WEBVIEWCHROMIUM=""
+-    fi
+-
+     fixup_common_out_dir
+ 
+     set_stuff_for_environment
+     printconfig
+-
+ }
+ 
+ # Tab completion for lunch.
+@@ -1353,20 +1345,6 @@ function pez {
+     return $retval
+ }
+ 
+-function chromium_prebuilt() {
+-    T=$(gettop)
+-    export TARGET_DEVICE=$(get_build_var TARGET_DEVICE)
+-    hash=$T/prebuilts/chromium/$TARGET_DEVICE/hash.txt
+-
+-    if [ -r $hash ] && [ $(git --git-dir=$T/external/chromium/.git --work-tree=$T/external/chromium rev-parse --verify HEAD) == $(cat $hash) ]; then
+-        export PRODUCT_PREBUILT_WEBVIEWCHROMIUM=yes
+-        echo "** Prebuilt Chromium is up-to-date; Will be used for build **"
+-    else
+-        export PRODUCT_PREBUILT_WEBVIEWCHROMIUM=no
+-        echo "** Prebuilt Chromium out-of-date/not found; Will build from source **"
+-    fi
+-}
+-
+ if [ "x$SHELL" != "x/bin/bash" ]; then
+     case `ps -o command -p $$` in
+         *bash*)
