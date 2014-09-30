@@ -1,7 +1,7 @@
-diff --git include/linux/msm_rotator.h include/linux/msm_rotator.h
+diff --git a/a/include/linux/msm_rotator.h b/include/linux/msm_rotator.h
 index 8a2256f..41b9804 100644
---- include/linux/msm_rotator.h
-+++ include/linux/msm_rotator.h
+--- a/include/linux/msm_rotator.h
++++ b/include/linux/msm_rotator.h
 @@ -12,6 +12,8 @@
  		_IOW(MSM_ROTATOR_IOCTL_MAGIC, 2, struct msm_rotator_data_info)
  #define MSM_ROTATOR_IOCTL_FINISH   \
