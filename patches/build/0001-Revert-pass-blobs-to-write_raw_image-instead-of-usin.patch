@@ -1,0 +1,30 @@
+From f45661a3cd4034b5a3da354ea015e3b4c2a4f852 Mon Sep 17 00:00:00 2001
+From: Vineeth Raj <contact.twn@openmailbox.org>
+Date: Tue, 30 Sep 2014 17:30:27 +0530
+Subject: [PATCH] Revert "pass blobs to write_raw_image() instead of using temp
+ file"
+
+This reverts commit 02da210a5cb4f9cdc7320885484499856236e5a4.
+---
+ tools/releasetools/edify_generator.py | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/tools/releasetools/edify_generator.py b/tools/releasetools/edify_generator.py
+index ff5f796..ac8de8d 100644
+--- a/tools/releasetools/edify_generator.py
++++ b/tools/releasetools/edify_generator.py
+@@ -249,8 +249,9 @@ class EdifyGenerator(object):
+       args = {'device': p.device, 'fn': fn}
+       if partition_type == "MTD":
+         self.script.append(
+-            'write_raw_image(package_extract_file("%(fn)s"), "%(device)s");'
+-            % args)
++            ('assert(package_extract_file("%(fn)s", "/tmp/%(device)s.img"),\n'
++             '       write_raw_image("/tmp/%(device)s.img", "%(device)s"),\n'
++             '       delete("/tmp/%(device)s.img"));') % args)
+       elif partition_type == "EMMC":
+         self.script.append(
+             'package_extract_file("%(fn)s", "%(device)s");' % args)
+-- 
+1.9.1
+
