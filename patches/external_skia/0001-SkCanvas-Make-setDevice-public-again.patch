@@ -1,4 +1,4 @@
-From 390cf91d1aa20f9b0d65e7c07d16378eb8d803e1 Mon Sep 17 00:00:00 2001
+From cd8a21da17b83745441adfc5f3c6f1f0c3e1ef47 Mon Sep 17 00:00:00 2001
 From: WinSuk <winsuk@winsuk.net>
 Date: Sat, 7 Jun 2014 00:04:35 -0700
 Subject: [PATCH] SkCanvas: Make setDevice public again
@@ -14,7 +14,7 @@ diff --git a/include/core/SkCanvas.h b/include/core/SkCanvas.h
 index 5a5cc65..069b95a 100644
 --- a/include/core/SkCanvas.h
 +++ b/include/core/SkCanvas.h
-@@ -1007,6 +1007,15 @@ class SK_API SkCanvas : public SkRefCnt {
+@@ -1007,6 +1007,15 @@ public:
          bool              fDone;
      };
  
@@ -30,7 +30,7 @@ index 5a5cc65..069b95a 100644
  protected:
      // Returns the canvas to be used by DrawIter. Default implementation
      // returns this. Subclasses that encapsulate an indirect canvas may
-@@ -1028,17 +1037,6 @@ class SK_API SkCanvas : public SkRefCnt {
+@@ -1028,17 +1037,6 @@ protected:
      // can perform copy-on-write or invalidate any cached images
      void predrawNotify();
  
@@ -49,4 +49,5 @@ index 5a5cc65..069b95a 100644
      class MCRec;
  
 -- 
-1.9.3
+1.9.1
+
