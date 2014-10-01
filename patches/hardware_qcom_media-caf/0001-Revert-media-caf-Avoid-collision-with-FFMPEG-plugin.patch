@@ -1,0 +1,49 @@
+From f43762577a04ae0253f6cd78e03ca6dfcd06b47e Mon Sep 17 00:00:00 2001
+From: Vineeth Raj <contact.twn@openmailbox.org>
+Date: Wed, 1 Oct 2014 06:17:46 +0530
+Subject: [PATCH] Revert "media-caf: Avoid collision with FFMPEG plugin"
+
+This reverts commit dab6ad4665dcfaaf1be426c4e35da61f735f7f09.
+---
+ mm-core/inc/QCMetaData.h | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/mm-core/inc/QCMetaData.h b/mm-core/inc/QCMetaData.h
+index 0da482b..57fcad6 100644
+--- a/mm-core/inc/QCMetaData.h
++++ b/mm-core/inc/QCMetaData.h
+@@ -36,7 +36,6 @@ namespace android {
+ enum {
+     kKeyAacCodecSpecificData = 'nacc' , // for native aac files
+ 
+-#if 0
+     kKeyRawCodecSpecificData = 'rcsd',  // raw data - added to support mmParser
+     kKeyDivXVersion          = 'DivX',  // int32_t
+     kKeyDivXDrm              = 'QDrm',  // void *
+@@ -48,7 +47,6 @@ enum {
+     kKeyWMAFormatTag         = 'fmtt',  // int64_t
+     kKeyWMABitspersample     = 'bsps',  // int64_t
+     kKeyWMAVirPktSize        = 'vpks',  // int64_t
+-#endif
+     kKeyWMAChannelMask       = 'chmk',  // int32_t
+ 
+     kKeyFileFormat           = 'ffmt',  // cstring
+@@ -73,7 +71,6 @@ enum {
+     kKeyMd5Sum            = 'md5s', //cstring
+ };
+ 
+-#if 0
+ enum {
+     kTypeDivXVer_3_11,
+     kTypeDivXVer_4,
+@@ -85,7 +82,6 @@ enum {
+     kTypeWMAPro,
+     kTypeWMALossLess,
+ };
+-#endif
+ 
+ //This enum should be keep in sync with "enum Flags" in MediaExtractor.h in AOSP,
+ //Value should reflect as last entry in the enum
+-- 
+1.9.1
+
