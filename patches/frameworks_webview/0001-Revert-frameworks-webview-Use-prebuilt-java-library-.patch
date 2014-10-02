@@ -1,0 +1,33 @@
+From 3c5c16e14b767ba6b3e46428e2b2bc6a38eaf8de Mon Sep 17 00:00:00 2001
+From: Vineeth Raj <contact.twn@openmailbox.org>
+Date: Wed, 1 Oct 2014 23:31:51 +0530
+Subject: [PATCH] Revert "frameworks/webview: Use prebuilt java library for
+ building if using prebuilt Chromium"
+
+This reverts commit ebfbf21279b9c2c5c3fc5df595239ee83b168ee6.
+---
+ chromium/Android.mk | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/chromium/Android.mk b/chromium/Android.mk
+index bdcfaa3..d715221 100644
+--- a/chromium/Android.mk
++++ b/chromium/Android.mk
+@@ -114,13 +114,7 @@ $(jar_check_ok): $(full_classes_jarjar_jar) $(LOCAL_PATH)/tools/jar_check.py $(L
+ $(LOCAL_BUILT_MODULE): $(jar_check_ok)
+ endif
+ 
+-# Use prebuilt android_webview_java to satisfy webviewchromium's dependency
+-# if we are working with prebuilt Chromium
+-ifeq ($(PRODUCT_PREBUILT_WEBVIEWCHROMIUM),yes)
+-include $(CLEAR_VARS)
+-LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := android_webview_java:../../../prebuilts/chromium/$(TARGET_DEVICE)/android_webview_java.jar
+-include $(BUILD_MULTI_PREBUILT)
+-endif
++
+ 
+ # Native support library (libwebviewchromium_plat_support.so) - does NOT link
+ # any native chromium code.
+-- 
+1.9.1
+
