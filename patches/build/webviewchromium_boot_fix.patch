@@ -1,23 +1,23 @@
 diff --git a/target/product/core_base.mk b/target/product/core_base.mk
-index 79f20c8..f225c5b 100644
+index 0a92fca..fa0dae5 100644
 --- a/target/product/core_base.mk
 +++ b/target/product/core_base.mk
-@@ -67,4 +67,4 @@ PRODUCT_PACKAGES += \
+@@ -64,4 +64,4 @@ PRODUCT_PACKAGES += \
  
  $(call inherit-product, $(SRC_TARGET_DIR)/product/core_minimal.mk)
  # Override the PRODUCT_BOOT_JARS set in core_minimal.mk
--PRODUCT_BOOT_JARS := core:conscrypt:okhttp:core-junit:bouncycastle:ext:framework:framework2:telephony-common:voip-common:mms-common:android.policy:services:apache-xml:webviewchromium
-+PRODUCT_BOOT_JARS := core:conscrypt:okhttp:core-junit:bouncycastle:ext:framework:framework2:telephony-common:voip-common:mms-common:android.policy:services:apache-xml
+-PRODUCT_BOOT_JARS := core:conscrypt:okhttp:core-junit:bouncycastle:ext:framework:framework2:org.mokee.framework:telephony-common:voip-common:mms-common:android.policy:services:apache-xml:webviewchromium:telephony-msim
++PRODUCT_BOOT_JARS := core:conscrypt:okhttp:core-junit:bouncycastle:ext:framework:framework2:org.mokee.framework:telephony-common:voip-common:mms-common:android.policy:services:apache-xml:telephony-msim
 diff --git a/target/product/core_minimal.mk b/target/product/core_minimal.mk
-index 159e7b2..586e7a6 100644
+index 2ecb05f..c7f32f5 100644
 --- a/target/product/core_minimal.mk
 +++ b/target/product/core_minimal.mk
-@@ -57,7 +57,7 @@ PRODUCT_PACKAGES += \
+@@ -59,7 +59,7 @@ PRODUCT_PACKAGES += \
      sensorservice \
      uiautomator
  
--PRODUCT_BOOT_JARS := core:conscrypt:okhttp:core-junit:bouncycastle:ext:framework:framework2:android.policy:services:apache-xml:webviewchromium
-+PRODUCT_BOOT_JARS := core:conscrypt:okhttp:core-junit:bouncycastle:ext:framework:framework2:android.policy:services:apache-xml
+-PRODUCT_BOOT_JARS := core:conscrypt:okhttp:core-junit:bouncycastle:ext:framework:framework2:org.mokee.framework:android.policy:services:apache-xml:webviewchromium
++PRODUCT_BOOT_JARS := core:conscrypt:okhttp:core-junit:bouncycastle:ext:framework:framework2:org.mokee.framework:android.policy:services:apache-xml
  
  PRODUCT_RUNTIMES := runtime_libdvm_default
  PRODUCT_RUNTIMES += runtime_libart
