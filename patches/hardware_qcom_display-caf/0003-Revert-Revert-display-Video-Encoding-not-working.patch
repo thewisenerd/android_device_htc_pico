@@ -1,0 +1,26 @@
+From 1f9f4623c6a849892a70dce31dc93b0b041921ae Mon Sep 17 00:00:00 2001
+From: Vineeth Raj <contact.twn@openmailbox.org>
+Date: Fri, 3 Oct 2014 22:47:51 +0530
+Subject: [PATCH] Revert "Revert "display: Video Encoding not working""
+
+This reverts commit 7c013a0113418dc9a4caff399157e2c8811baf5a.
+---
+ libgralloc/gpu.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libgralloc/gpu.cpp b/libgralloc/gpu.cpp
+index b1b1c06..7fc32ec 100644
+--- a/libgralloc/gpu.cpp
++++ b/libgralloc/gpu.cpp
+@@ -262,7 +262,7 @@ int gpu_context_t::alloc_impl(int w, int h, int format, int usage,
+     if(format == HAL_PIXEL_FORMAT_IMPLEMENTATION_DEFINED ||
+        format == HAL_PIXEL_FORMAT_YCbCr_420_888) {
+         if(usage & GRALLOC_USAGE_HW_VIDEO_ENCODER)
+-            grallocFormat = HAL_PIXEL_FORMAT_NV12_ENCODEABLE; //NV12
++            grallocFormat = HAL_PIXEL_FORMAT_YCbCr_420_SP_VENUS;
+         else if((usage & GRALLOC_USAGE_HW_CAMERA_MASK)
+                 == GRALLOC_USAGE_HW_CAMERA_ZSL)
+             grallocFormat = HAL_PIXEL_FORMAT_NV21_ZSL; //NV21 ZSL
+-- 
+1.9.1
+
