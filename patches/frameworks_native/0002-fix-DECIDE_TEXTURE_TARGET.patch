@@ -1,0 +1,57 @@
+From 0a427252be9aad88b7c9a70cf7aa8e0c2474eab2 Mon Sep 17 00:00:00 2001
+From: Grigori Goronzy <greg@blackbox>
+Date: Wed, 22 Jan 2014 02:27:23 +1100
+Subject: [PATCH] fix DECIDE_TEXTURE_TARGET
+
+The DECIDE_TEXTURE_TARGET hack wasn't correctly handling the
+BufferRejecter that was added in JB and this resulted in various
+graphical corruption.
+
+see
+   http://www.modaco.com/topic/359832-devrom247-cyanogenmod-101-android-422/?p=2107115
+and
+   https://github.com/grigorig/android_device_zte_blade/commit/f1bbba27fbc439db283cde010cbbf4f962cc8c50
+
+Change-Id: I934345601ff38c3b404ffc704476d2820d5ab515
+---
+ services/surfaceflinger/SurfaceFlingerConsumer.cpp | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/services/surfaceflinger/SurfaceFlingerConsumer.cpp b/services/surfaceflinger/SurfaceFlingerConsumer.cpp
+index 4655239..3b1e463 100644
+--- a/services/surfaceflinger/SurfaceFlingerConsumer.cpp
++++ b/services/surfaceflinger/SurfaceFlingerConsumer.cpp
+@@ -73,15 +73,7 @@ status_t SurfaceFlingerConsumer::updateTexImage(BufferRejecter* rejecter)
+         return err;
+     }
+ 
+-
+-    // We call the rejecter here, in case the caller has a reason to
+-    // not accept this buffer.  This is used by SurfaceFlinger to
+-    // reject buffers which have the wrong size
+     int buf = item.mBuf;
+-    if (rejecter && rejecter->reject(mSlots[buf].mGraphicBuffer, item)) {
+-        releaseBufferLocked(buf, mSlots[buf].mGraphicBuffer, EGL_NO_SYNC_KHR);
+-        return NO_ERROR;
+-    }
+ 
+ #ifdef DECIDE_TEXTURE_TARGET
+     // GPU is not efficient in handling GL_TEXTURE_EXTERNAL_OES
+@@ -105,6 +97,14 @@ status_t SurfaceFlingerConsumer::updateTexImage(BufferRejecter* rejecter)
+     }
+ #endif
+ 
++    // We call the rejecter here, in case the caller has a reason to
++    // not accept this buffer.  This is used by SurfaceFlinger to
++    // reject buffers which have the wrong size
++    if (rejecter && rejecter->reject(mSlots[buf].mGraphicBuffer, item)) {
++        releaseBufferLocked(buf, mSlots[buf].mGraphicBuffer, EGL_NO_SYNC_KHR);
++        return NO_ERROR;
++    }
++
+     // Release the previous buffer.
+     err = updateAndReleaseLocked(item);
+     if (err != NO_ERROR) {
+-- 
+1.9.1
+
