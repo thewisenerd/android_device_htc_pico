@@ -54,7 +54,7 @@
         <!-- Video Software  -->
         <MediaCodec name="OMX.ittiam.video.encoder.avc" type="video/avc" >
             <Quirk name="requires-allocate-on-input-ports" />
-            <Quirk name="requires-loaded-to-idle-after-allocation" />
+            <Quirk name="requies-loaded-to-idle-after-allocation" />
         </MediaCodec>
         <MediaCodec name="OMX.google.h264.encoder" type="video/avc" />
         <MediaCodec name="OMX.google.mpeg4.encoder" type="video/mp4v-es" />
