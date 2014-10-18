@@ -15,3 +15,9 @@ for i in $(find "$PATCHBASE"/* -type d); do
 	cd "$CMBASE/$PATCHTARGET" || exit 1
 	git reset --hard || exit 1
 done
+
+#auto merge legacymod
+cd $PATCHBASE
+cd ../../../../frameworks/av
+git checkout cm-11.0
+git pull github cm-11.0

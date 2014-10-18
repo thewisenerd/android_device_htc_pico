@@ -15,3 +15,9 @@ for i in $(find "$PATCHBASE"/* -type d); do
 	cd "$CMBASE/$PATCHTARGET" || exit 1
 	git apply --3way "$PATCHBASE/$PATCHNAME"/* || exit 1
 done
+
+#auto merge legacymod
+cd $PATCHBASE
+cd ../../../../frameworks/av
+git checkout lcm
+git pull lcm
