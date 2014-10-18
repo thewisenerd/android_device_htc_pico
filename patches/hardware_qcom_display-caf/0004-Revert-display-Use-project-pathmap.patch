@@ -1,0 +1,23 @@
+From cf56f09bf8fe5e82761ff05a90c2cdadd48ade4b Mon Sep 17 00:00:00 2001
+From: Vineeth Raj <contact.twn@openmailbox.org>
+Date: Sat, 18 Oct 2014 12:39:58 +0530
+Subject: [PATCH] Revert "display: Use project pathmap"
+
+This reverts commit 47d4d15ee68958a4ac27c9f60ec943c9d5e62ed2.
+---
+ Android.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Android.mk b/Android.mk
+index 98f7bd1..0d94fc3 100644
+--- a/Android.mk
++++ b/Android.mk
+@@ -1,4 +1,4 @@
+-ifeq ($(call my-dir),$(call project-path-for,qcom-display))
++ifeq ($(TARGET_QCOM_DISPLAY_VARIANT),caf)
+ 
+ display-hals := libgralloc libgenlock libcopybit libvirtual
+ display-hals += libhwcomposer liboverlay libqdutils libexternal libqservice
+-- 
+1.9.1
+
