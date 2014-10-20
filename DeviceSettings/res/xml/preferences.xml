@@ -53,4 +53,26 @@
 
     </PreferenceCategory>
 
+    <!-- PocketMod -->
+
+    <PreferenceCategory android:title="PocketMod" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pocketmod_enabled"
+            android:summary="is disabled"
+            android:title="PocketMod" />
+
+    </PreferenceCategory>
+
+    <!-- FastCharge -->
+
+    <PreferenceCategory android:title="FastCharge" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="fastcharge_enabled"
+            android:summary="Force AC charging for any charger that is detected as USB (e.g. many car chargers)."
+            android:title="Force fast charge" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

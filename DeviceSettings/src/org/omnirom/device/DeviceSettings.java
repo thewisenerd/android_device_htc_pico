@@ -27,6 +27,10 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
     private CheckBoxPreference mDT2WPref;
     private SeekBarPreference  mDT2WMaxTimeout;
 
+    private CheckBoxPreference mPocketModPref;
+
+    private CheckBoxPreference mFastChargePref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +92,29 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
         ret = Helpers.readOneLine(KEY_MAIN_DT2W_MAX_TIME_SEEK_PATH);
         mDT2WMaxTimeout.setValue(Integer.parseInt(ret));
         mDT2WMaxTimeout.setOnPreferenceChangeListener(this);
+
+        /* PocketMod */
+        /*  main toggle */
+        /* todo: if s2w, dt2w are disabled, disable pocketmod */
+        mPocketModPref = (CheckBoxPreference) findPreference(KEY_MAIN_POCKET_MOD);
+        ret = Helpers.readOneLine(KEY_MAIN_POCKET_MOD_PATH);
+        if (ret.equals("1"))
+            mPocketModPref.setChecked(true);
+        else
+            mPocketModPref.setChecked(false);
+        mPocketModPref.setOnPreferenceChangeListener(this);
+
+        /* todo: add BLN hook here */
+
+        /* FastCharge */
+        /*  main toggle */
+        mFastChargePref = (CheckBoxPreference) findPreference(KEY_MAIN_FAST_CHARGE);
+        ret = Helpers.readOneLine(KEY_MAIN_FAST_CHARGE_PATH);
+        if (ret.equals("1"))
+            mFastChargePref.setChecked(true);
+        else
+            mFastChargePref.setChecked(false);
+        mFastChargePref.setOnPreferenceChangeListener(this);
 
     }
     
@@ -191,7 +218,58 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
                 Log.w(TAG, "user fails to set dt2w max timeout");
                 return false;
             }
+        } else if (preference == mPocketModPref) {
+            if ( ((Boolean)o).booleanValue() == true ) {
+                Log.i(TAG, "user attempts to enable PocketMod");
+                bool = Helpers.writeOneLine(KEY_MAIN_POCKET_MOD_PATH, "1");
+                if ( bool == true ) {
+                    Log.i(TAG, "user enables PocketMod");
+                    return true;
+                } else {
+                    Log.w(TAG, "user fails to enable PocketMod");
+                    return false;
+                }
+            } else if ( ((Boolean)o).booleanValue() == false ) {
+                Log.i(TAG, "user attempts to disable PocketMod");
+                bool = Helpers.writeOneLine(KEY_MAIN_POCKET_MOD_PATH, "0");
+                if ( bool == true ) {
+                    Log.i(TAG, "user disables PocketMod");
+                    return true;
+                } else {
+                    Log.w(TAG, "user fails to disable PocketMod");
+                    return false;
+                }
+            } else {
+                Log.i(TAG, "PocketMod: unhandled exception on PocketMod toggle");
+                return false;
+            }
+        } else if (preference == mFastChargePref) {
+            if ( ((Boolean)o).booleanValue() == true ) {
+                Log.i(TAG, "user attempts to enable FastCharge");
+                bool = Helpers.writeOneLine(KEY_MAIN_FAST_CHARGE_PATH, "1");
+                if ( bool == true ) {
+                    Log.i(TAG, "user enables FastCharge");
+                    return true;
+                } else {
+                    Log.w(TAG, "user fails to enable FastCharge");
+                    return false;
+                }
+            } else if ( ((Boolean)o).booleanValue() == false ) {
+                Log.i(TAG, "user attempts to disable FastCharge");
+                bool = Helpers.writeOneLine(KEY_MAIN_FAST_CHARGE_PATH, "0");
+                if ( bool == true ) {
+                    Log.i(TAG, "user disables FastCharge");
+                    return true;
+                } else {
+                    Log.w(TAG, "user fails to disable FastCharge");
+                    return false;
+                }
+            } else {
+                Log.i(TAG, "FastCharge: unhandled exception on FastCharge toggle");
+                return false;
+            }
         }
+
 
         return false;
     }
