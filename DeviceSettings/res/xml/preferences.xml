@@ -75,4 +75,33 @@
 
     </PreferenceCategory>
 
+    <!-- Vibrator Intensity -->
+
+    <PreferenceCategory android:title="Vibrator" >
+        <org.omnirom.device.SeekBarPreference
+            android:key="vibrator_voltage"
+            android:title="Vibrator Voltage"
+            android:summary="in mV (def: 3000)"
+            android:max="3100"
+            settings:min="2100"
+            settings:interval="50"
+            android:defaultValue="3000" />
+
+    </PreferenceCategory>
+
+
+    <!-- Sound Boost -->
+
+    <PreferenceCategory android:title="Sound Boost" >
+        <org.omnirom.device.SeekBarPreference
+            android:key="sound_boost"
+            android:title="Volume Boost"
+            android:summary="dynamically boost all volume (def: 0)"
+            android:max="8"
+            settings:min="0"
+            settings:interval="1"
+            android:defaultValue="0" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

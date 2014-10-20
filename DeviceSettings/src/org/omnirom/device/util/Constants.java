@@ -22,4 +22,10 @@ public interface Constants {
     static final String KEY_MAIN_FAST_CHARGE = "fastcharge_enabled";
     static final String KEY_MAIN_FAST_CHARGE_PATH = "/sys/kernel/fast_charge/force_fast_charge";
 
+    static final String KEY_MAIN_VIBRATOR = "vibrator_voltage";
+    static final String KEY_MAIN_VIBRATOR_PATH = "/sys/devices/virtual/timed_output/vibrator/voltage";
+
+    static final String KEY_MAIN_SOUND_BOOST = "sound_boost";
+    static final String KEY_MAIN_SOUND_BOOST_PATH = "/sys/sound_control/volume_boost";
+
 }

@@ -31,6 +31,10 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
 
     private CheckBoxPreference mFastChargePref;
 
+    private SeekBarPreference  mVibratorVoltage;
+
+    private SeekBarPreference  mSoundBoost;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +119,20 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
         else
             mFastChargePref.setChecked(false);
         mFastChargePref.setOnPreferenceChangeListener(this);
+        
+        /* VibratorVoltage */
+        /*  seekbar */
+        mVibratorVoltage = (SeekBarPreference) findPreference(KEY_MAIN_VIBRATOR);
+        ret = Helpers.readOneLine(KEY_MAIN_VIBRATOR_PATH);
+        mVibratorVoltage.setValue(Integer.parseInt(ret));
+        mVibratorVoltage.setOnPreferenceChangeListener(this);
+
+        /* SoundBoost */
+        /*  seekbar */
+        mSoundBoost = (SeekBarPreference) findPreference(KEY_MAIN_SOUND_BOOST);
+        ret = Helpers.readOneLine(KEY_MAIN_SOUND_BOOST_PATH);
+        mSoundBoost.setValue(Integer.parseInt(ret));
+        mSoundBoost.setOnPreferenceChangeListener(this);
 
     }
     
@@ -266,6 +284,24 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
                 }
             } else {
                 Log.i(TAG, "FastCharge: unhandled exception on FastCharge toggle");
+                return false;
+            }
+        } else if (preference == mVibratorVoltage ) {
+            bool = Helpers.writeOneLine(KEY_MAIN_VIBRATOR_PATH, Integer.toString(((Integer)o)));
+            if ( bool == true ) {
+                Log.i(TAG, "user sets vibrator voltage");
+                return true;
+            } else {
+                Log.w(TAG, "user fails to set vibrator voltage");
+                return false;
+            }
+        } else if (preference == mSoundBoost ) {
+            bool = Helpers.writeOneLine(KEY_MAIN_SOUND_BOOST_PATH, Integer.toString(((Integer)o)));
+            if ( bool == true ) {
+                Log.i(TAG, "user sets sound boost val");
+                return true;
+            } else {
+                Log.w(TAG, "user fails to set sound boost val");
                 return false;
             }
         }
