@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:settings="http://schemas.android.com/apk/res/org.omnirom.device"
+                  android:title="@string/app_name">
+
+    <!-- Sweep2Wake -->
+
+    <PreferenceCategory android:title="Sweep2Wake" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="s2w_enabled"
+            android:summary="is disabled"
+            android:title="Sweep2Wake" />
+
+        <org.omnirom.device.SeekBarPreference
+            android:key="s2w_min_distance"
+            android:title="Minimum distance"
+            android:summary="Adjust minimum swipe distance"
+            android:max="1000"
+            settings:min="250"
+            settings:interval="10"
+            android:defaultValue="650"
+            android:dependency="s2w_enabled" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="s2s_enabled"
+            android:summary="is disabled"
+            android:title="Sweep2Sleep only"
+            android:dependency="s2w_enabled" />
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>
