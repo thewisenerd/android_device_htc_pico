@@ -27,6 +27,8 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
     private CheckBoxPreference mDT2WPref;
     private SeekBarPreference  mDT2WMaxTimeout;
 
+    private CheckBoxPreference mBLNPref;
+
     private CheckBoxPreference mPocketModPref;
 
     private CheckBoxPreference mFastChargePref;
@@ -97,6 +99,16 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
         mDT2WMaxTimeout.setValue(Integer.parseInt(ret));
         mDT2WMaxTimeout.setOnPreferenceChangeListener(this);
 
+        /* BLN */
+        /*  main toggle */
+        mBLNPref = (CheckBoxPreference) findPreference(KEY_MAIN_BLN);
+        ret = Helpers.readOneLine(KEY_MAIN_BLN_PATH);
+        if (ret.equals("1"))
+            mBLNPref.setChecked(true);
+        else
+            mBLNPref.setChecked(false);
+        mBLNPref.setOnPreferenceChangeListener(this);
+
         /* PocketMod */
         /*  main toggle */
         /* todo: if s2w, dt2w are disabled, disable pocketmod */
@@ -107,8 +119,6 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
         else
             mPocketModPref.setChecked(false);
         mPocketModPref.setOnPreferenceChangeListener(this);
-
-        /* todo: add BLN hook here */
 
         /* FastCharge */
         /*  main toggle */
@@ -234,6 +244,31 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
                 return true;
             } else {
                 Log.w(TAG, "user fails to set dt2w max timeout");
+                return false;
+            }
+        } else if (preference == mBLNPref) {
+            if ( ((Boolean)o).booleanValue() == true ) {
+                Log.i(TAG, "user attempts to enable BLN");
+                bool = Helpers.writeOneLine(KEY_MAIN_BLN_PATH, "1");
+                if ( bool == true ) {
+                    Log.i(TAG, "user enables BLN");
+                    return true;
+                } else {
+                    Log.w(TAG, "user fails to enable BLN");
+                    return false;
+                }
+            } else if ( ((Boolean)o).booleanValue() == false ) {
+                Log.i(TAG, "user attempts to disable BLN");
+                bool = Helpers.writeOneLine(KEY_MAIN_BLN_PATH, "0");
+                if ( bool == true ) {
+                    Log.i(TAG, "user disables BLN");
+                    return true;
+                } else {
+                    Log.w(TAG, "user fails to disable BLN");
+                    return false;
+                }
+            } else {
+                Log.i(TAG, "BLN: unhandled exception on BLN toggle");
                 return false;
             }
         } else if (preference == mPocketModPref) {

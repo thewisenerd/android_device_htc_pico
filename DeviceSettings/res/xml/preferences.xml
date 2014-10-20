@@ -64,6 +64,17 @@
 
     </PreferenceCategory>
 
+    <!-- BLN -->
+
+    <PreferenceCategory android:title="BackLightNotifications" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="bln_enabled"
+            android:summary="are disabled"
+            android:title="Backlight Notifications" />
+
+    </PreferenceCategory>
+
     <!-- FastCharge -->
 
     <PreferenceCategory android:title="FastCharge" >
