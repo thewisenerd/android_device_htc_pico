@@ -2,7 +2,7 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
                   xmlns:settings="http://schemas.android.com/apk/res/org.omnirom.device"
-                  android:title="@string/app_name">
+                  android:title="Cody cPanel">
 
     <!-- Sweep2Wake -->
 
@@ -112,6 +112,17 @@
             settings:min="0"
             settings:interval="1"
             android:defaultValue="0" />
+
+    </PreferenceCategory>
+
+    <!-- theme -->
+
+    <PreferenceCategory android:title="Theme" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="dark_theme_enabled"
+            android:summary="is disabled"
+            android:title="Dark Theme" />
 
     </PreferenceCategory>
 
