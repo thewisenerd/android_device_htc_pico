@@ -141,8 +141,6 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
             mS2WS2SPref.setChecked(false);
         mS2WS2SPref.setOnPreferenceChangeListener(this);
 
-        /* todo: add 'options' restoring at boot, etc. */
-
         /* DoubleTap2Wake */
         /*  main toggle */
         mDT2WPref = (CheckBoxPreference) findPreference(KEY_MAIN_DT2W);
@@ -277,10 +275,6 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
                 return false;
             }
         } else if (preference == mS2WS2SPref ) {
-            /* bughere: kernel expects if s2s == 1, dt2w = 0.
-             * todo:    fix it in kernel properly.
-             *          while at it, try fixing variable states (i.e. reset them).
-             */
             if ( ((Boolean)o).booleanValue() == true ) {
                 Log.i(TAG, "user attempts to enable S2W S2S");
                 bool = Helpers.writeOneLine(KEY_MAIN_S2W_S2S_PATH, "1");
