@@ -99,16 +99,6 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
         mDT2WMaxTimeout.setValue(Integer.parseInt(ret));
         mDT2WMaxTimeout.setOnPreferenceChangeListener(this);
 
-        /* BLN */
-        /*  main toggle */
-        mBLNPref = (CheckBoxPreference) findPreference(KEY_MAIN_BLN);
-        ret = Helpers.readOneLine(KEY_MAIN_BLN_PATH);
-        if (ret.equals("1"))
-            mBLNPref.setChecked(true);
-        else
-            mBLNPref.setChecked(false);
-        mBLNPref.setOnPreferenceChangeListener(this);
-
         /* PocketMod */
         /*  main toggle */
         /* todo: if s2w, dt2w are disabled, disable pocketmod */
@@ -119,6 +109,16 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
         else
             mPocketModPref.setChecked(false);
         mPocketModPref.setOnPreferenceChangeListener(this);
+
+        /* BLN */
+        /*  main toggle */
+        mBLNPref = (CheckBoxPreference) findPreference(KEY_MAIN_BLN);
+        ret = Helpers.readOneLine(KEY_MAIN_BLN_PATH);
+        if (ret.equals("1"))
+            mBLNPref.setChecked(true);
+        else
+            mBLNPref.setChecked(false);
+        mBLNPref.setOnPreferenceChangeListener(this);
 
         /* FastCharge */
         /*  main toggle */
@@ -144,6 +144,13 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
         mSoundBoost.setValue(Integer.parseInt(ret));
         mSoundBoost.setOnPreferenceChangeListener(this);
 
+        mS2WPref.setSummary("is "+((mS2WPref.isChecked())?"enabled":"disabled"));
+        mS2WS2SPref.setSummary("is "+((mS2WS2SPref.isChecked())?"enabled":"disabled"));
+        mDT2WPref.setSummary("is "+((mDT2WPref.isChecked())?"enabled":"disabled"));
+        mPocketModPref.setSummary("is "+((mPocketModPref.isChecked())?"enabled":"disabled"));
+        mBLNPref.setSummary("is "+((mBLNPref.isChecked())?"enabled":"disabled"));
+        mFastChargePref.setSummary("is "+((mFastChargePref.isChecked())?"enabled":"disabled"));
+
     }
     
     @Override
@@ -154,9 +161,11 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
                 Log.i(TAG, "user attempts to enable S2W");
                 bool = Helpers.writeOneLine(KEY_MAIN_S2W_PATH, "1");
                 if ( bool == true ) {
+                    preference.setSummary("is enabled");
                     Log.i(TAG, "user enables S2W");
                     return true;
                 } else {
+                    preference.setSummary("is invalid");
                     Log.w(TAG, "user fails to enable S2W");
                     return false;
                 }
@@ -164,14 +173,17 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
                 Log.i(TAG, "user attempts to disable S2W");
                 bool = Helpers.writeOneLine(KEY_MAIN_S2W_PATH, "0");
                 if ( bool == true ) {
+                    preference.setSummary("is disabled");
                     Log.i(TAG, "user disables S2W");
                     return true;
                 } else {
+                    preference.setSummary("is invalid");
                     Log.w(TAG, "user fails to disable S2W");
                     return false;
                 }
             } else {
                 Log.i(TAG, "S2W: unhandled exception on S2W toggle");
+                preference.setSummary("is invalid");
                 return false;
             }
         } else if (preference == mS2WMinDistance ) {
@@ -192,9 +204,11 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
                 Log.i(TAG, "user attempts to enable S2W S2S");
                 bool = Helpers.writeOneLine(KEY_MAIN_S2W_S2S_PATH, "1");
                 if ( bool == true ) {
+                    preference.setSummary("is enabled");
                     Log.i(TAG, "user enables S2W S2S");
                     return true;
                 } else {
+                    preference.setSummary("is invalid");
                     Log.w(TAG, "user fails to enable S2W S2S");
                     return false;
                 }
@@ -203,12 +217,15 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
                 bool = Helpers.writeOneLine(KEY_MAIN_S2W_S2S_PATH, "0");
                 if ( bool == true ) {
                     Log.i(TAG, "user disables S2W S2S");
+                    preference.setSummary("is disabled");
                     return true;
                 } else {
                     Log.w(TAG, "user fails to disable S2W S2S");
+                    preference.setSummary("is invalid");
                     return false;
                 }
             } else {
+                preference.setSummary("is invalid");
                 Log.i(TAG, "S2W: unhandled exception on S2W S2S toggle");
                 return false;
             }
@@ -218,9 +235,11 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
                 bool = Helpers.writeOneLine(KEY_MAIN_DT2W_PATH, "1");
                 if ( bool == true ) {
                     Log.i(TAG, "user enables DT2W");
+                    preference.setSummary("is enabled");
                     return true;
                 } else {
                     Log.w(TAG, "user fails to enable DT2W");
+                    preference.setSummary("is invalid");
                     return false;
                 }
             } else if ( ((Boolean)o).booleanValue() == false ) {
@@ -228,13 +247,16 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
                 bool = Helpers.writeOneLine(KEY_MAIN_DT2W_PATH, "0");
                 if ( bool == true ) {
                     Log.i(TAG, "user disables DT2W");
+                    preference.setSummary("is disabled");
                     return true;
                 } else {
                     Log.w(TAG, "user fails to disable DT2W");
+                    preference.setSummary("is invalid");
                     return false;
                 }
             } else {
                 Log.i(TAG, "DT2W: unhandled exception on DT2W toggle");
+                preference.setSummary("is invalid");
                 return false;
             }
         } else if (preference == mDT2WMaxTimeout ) {
@@ -252,9 +274,11 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
                 bool = Helpers.writeOneLine(KEY_MAIN_BLN_PATH, "1");
                 if ( bool == true ) {
                     Log.i(TAG, "user enables BLN");
+                    preference.setSummary("is enabled");
                     return true;
                 } else {
                     Log.w(TAG, "user fails to enable BLN");
+                    preference.setSummary("is invalid");
                     return false;
                 }
             } else if ( ((Boolean)o).booleanValue() == false ) {
@@ -262,12 +286,15 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
                 bool = Helpers.writeOneLine(KEY_MAIN_BLN_PATH, "0");
                 if ( bool == true ) {
                     Log.i(TAG, "user disables BLN");
+                    preference.setSummary("is disabled");
                     return true;
                 } else {
                     Log.w(TAG, "user fails to disable BLN");
+                    preference.setSummary("is invalid");
                     return false;
                 }
             } else {
+                preference.setSummary("is invalid");
                 Log.i(TAG, "BLN: unhandled exception on BLN toggle");
                 return false;
             }
@@ -277,9 +304,11 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
                 bool = Helpers.writeOneLine(KEY_MAIN_POCKET_MOD_PATH, "1");
                 if ( bool == true ) {
                     Log.i(TAG, "user enables PocketMod");
+                    preference.setSummary("is enabled");
                     return true;
                 } else {
                     Log.w(TAG, "user fails to enable PocketMod");
+                    preference.setSummary("is invalid");
                     return false;
                 }
             } else if ( ((Boolean)o).booleanValue() == false ) {
@@ -287,12 +316,15 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
                 bool = Helpers.writeOneLine(KEY_MAIN_POCKET_MOD_PATH, "0");
                 if ( bool == true ) {
                     Log.i(TAG, "user disables PocketMod");
+                    preference.setSummary("is disabled");
                     return true;
                 } else {
                     Log.w(TAG, "user fails to disable PocketMod");
+                    preference.setSummary("is invalid");
                     return false;
                 }
             } else {
+                preference.setSummary("is invalid");
                 Log.i(TAG, "PocketMod: unhandled exception on PocketMod toggle");
                 return false;
             }
@@ -302,8 +334,10 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
                 bool = Helpers.writeOneLine(KEY_MAIN_FAST_CHARGE_PATH, "1");
                 if ( bool == true ) {
                     Log.i(TAG, "user enables FastCharge");
+                    preference.setSummary("is enabled");
                     return true;
                 } else {
+                    preference.setSummary("is invalid");
                     Log.w(TAG, "user fails to enable FastCharge");
                     return false;
                 }
@@ -312,13 +346,16 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
                 bool = Helpers.writeOneLine(KEY_MAIN_FAST_CHARGE_PATH, "0");
                 if ( bool == true ) {
                     Log.i(TAG, "user disables FastCharge");
+                    preference.setSummary("is disabled");
                     return true;
                 } else {
+                    preference.setSummary("is invalid");
                     Log.w(TAG, "user fails to disable FastCharge");
                     return false;
                 }
             } else {
                 Log.i(TAG, "FastCharge: unhandled exception on FastCharge toggle");
+                preference.setSummary("is invalid");
                 return false;
             }
         } else if (preference == mVibratorVoltage ) {

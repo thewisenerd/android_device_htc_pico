@@ -66,12 +66,12 @@
 
     <!-- BLN -->
 
-    <PreferenceCategory android:title="BackLightNotifications" >
+    <PreferenceCategory android:title="BackLightNotification" >
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="bln_enabled"
             android:summary="are disabled"
-            android:title="Backlight Notifications" />
+            android:title="Backlight Notification" />
 
     </PreferenceCategory>
 
@@ -81,7 +81,7 @@
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="fastcharge_enabled"
-            android:summary="Force AC charging for any charger that is detected as USB (e.g. many car chargers)."
+            android:summary="is disabled"
             android:title="Force fast charge" />
 
     </PreferenceCategory>
