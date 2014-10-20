@@ -32,5 +32,25 @@
 
     </PreferenceCategory>
 
+    <!-- DoubleTap2Wake -->
+
+    <PreferenceCategory android:title="DoubleTap2Wake" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="dt2w_enabled"
+            android:summary="is disabled"
+            android:title="DoubleTap2Wake" />
+
+        <org.omnirom.device.SeekBarPreference
+            android:key="dt2w_max_timeout"
+            android:title="Adjust maximum duration"
+            android:summary="Maximum tap duration"
+            android:max="1000"
+            settings:min="0"
+            settings:interval="10"
+            android:defaultValue="400"
+            android:dependency="dt2w_enabled" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

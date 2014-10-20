@@ -23,6 +23,9 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
     private CheckBoxPreference mS2WPref;
     private SeekBarPreference  mS2WMinDistance;
     private CheckBoxPreference mS2WS2SPref;
+    
+    private CheckBoxPreference mDT2WPref;
+    private SeekBarPreference  mDT2WMaxTimeout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,22 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
         mS2WS2SPref.setOnPreferenceChangeListener(this);
         
         /* todo: add 'options' restoring at boot, etc. */
+
+        /* DoubleTap2Wake */
+        /*  main toggle */
+        mDT2WPref = (CheckBoxPreference) findPreference(KEY_MAIN_DT2W);
+        ret = Helpers.readOneLine(KEY_MAIN_DT2W_PATH);
+        if (ret.equals("1"))
+            mDT2WPref.setChecked(true);
+        else
+            mDT2WPref.setChecked(false);
+        mDT2WPref.setOnPreferenceChangeListener(this);
+        
+        /*  max timeout */
+        mDT2WMaxTimeout = (SeekBarPreference) findPreference(KEY_MAIN_DT2W_MAX_TIME_SEEK);
+        ret = Helpers.readOneLine(KEY_MAIN_DT2W_MAX_TIME_SEEK_PATH);
+        mDT2WMaxTimeout.setValue(Integer.parseInt(ret));
+        mDT2WMaxTimeout.setOnPreferenceChangeListener(this);
 
     }
     
@@ -138,7 +157,42 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
                 Log.i(TAG, "S2W: unhandled exception on S2W S2S toggle");
                 return false;
             }
+        } else if (preference == mDT2WPref) {
+            if ( ((Boolean)o).booleanValue() == true ) {
+                Log.i(TAG, "user attempts to enable DT2W");
+                bool = Helpers.writeOneLine(KEY_MAIN_DT2W_PATH, "1");
+                if ( bool == true ) {
+                    Log.i(TAG, "user enables DT2W");
+                    return true;
+                } else {
+                    Log.w(TAG, "user fails to enable DT2W");
+                    return false;
+                }
+            } else if ( ((Boolean)o).booleanValue() == false ) {
+                Log.i(TAG, "user attempts to disable DT2W");
+                bool = Helpers.writeOneLine(KEY_MAIN_DT2W_PATH, "0");
+                if ( bool == true ) {
+                    Log.i(TAG, "user disables DT2W");
+                    return true;
+                } else {
+                    Log.w(TAG, "user fails to disable DT2W");
+                    return false;
+                }
+            } else {
+                Log.i(TAG, "DT2W: unhandled exception on DT2W toggle");
+                return false;
+            }
+        } else if (preference == mDT2WMaxTimeout ) {
+            bool = Helpers.writeOneLine(KEY_MAIN_DT2W_MAX_TIME_SEEK_PATH, Integer.toString(((Integer)o)));
+            if ( bool == true ) {
+                Log.i(TAG, "user sets dt2w max timeout");
+                return true;
+            } else {
+                Log.w(TAG, "user fails to set dt2w max timeout");
+                return false;
+            }
         }
+
         return false;
     }
 
