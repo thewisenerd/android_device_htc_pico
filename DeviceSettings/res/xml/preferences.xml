@@ -115,13 +115,17 @@
 
     </PreferenceCategory>
 
+    <!-- Knock Code -->
+
     <PreferenceCategory android:title="Knock Code™" >
         <Preference
             android:key="pref_knock_code_set"
             android:title="Knock Code"
             android:summary="Set up Knock Code" >
-            <intent android:action="android.intent.action.VIEW"
-                    android:data="http://www.example.com" />
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="org.omnirom.device"
+                android:targetClass="org.omnirom.device.KnockCodeSettings" />
         </Preference>
     </PreferenceCategory>
 

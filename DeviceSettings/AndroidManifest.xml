@@ -18,6 +18,12 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".KnockCodeSettings"
+            android:icon="@drawable/ic_launcher"
+            android:label="Knock Code" >
+        </activity>
+
         <receiver android:name=".BootReceiver" >
             <intent-filter android:priority="100" >
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
