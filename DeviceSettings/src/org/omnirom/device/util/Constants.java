@@ -32,6 +32,8 @@ public interface Constants {
     static final String KEY_MAIN_SOUND_BOOST = "sound_boost";
     static final String KEY_MAIN_SOUND_BOOST_PATH = "/sys/sound_control/volume_boost";
 
+    static final String KEY_MAIN_KNOCK_CODE_PREF = "pref_knock_code_set";
+
     static final String KEY_MAIN_DARK_THEME = "dark_theme_enabled";
 
 }
