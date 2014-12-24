@@ -6,12 +6,10 @@ import android.widget.Button;
 
 public class KnockCodeSettings extends Activity {
 
-    Button button;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.xml.main2);
+        setContentView(R.xml.knock_code_prefs);
     }
 
 }
