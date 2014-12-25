@@ -99,7 +99,7 @@ public class BootReceiver extends BroadcastReceiver implements Constants {
             Helpers.writeOneLine(KEY_MAIN_KNOCK_CODE_SWITCH_PATH, "0");
         }
 
-        Log.i(TAG, "restoring knock code pattern." + sharedPrefs.getString(DeviceSettings.KEY_MAIN_KNOCK_CODE_PREF, "1234"));
+        Log.i(TAG, "restoring knock code pattern.");
         Helpers.writeOneLine(
             KEY_MAIN_KNOCK_CODE_PATTERN_PATH,
             (("1234" + (sharedPrefs.getString(DeviceSettings.KEY_MAIN_KNOCK_CODE_PREF, "1234"))
