@@ -47,7 +47,7 @@
                 android:id="@+id/knock_code_user_input"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="*"
+                android:text=""
                 android:layout_centerHorizontal="true"
                 android:textIsSelectable="false"
                 android:textAppearance="?android:attr/textAppearanceMedium" />

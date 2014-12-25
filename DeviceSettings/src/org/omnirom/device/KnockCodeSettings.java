@@ -65,7 +65,7 @@ public class KnockCodeSettings extends Activity implements Constants{
         knock_code_activity_title = (TextView) findViewById(R.id.knock_code_activity_title);
         knock_code_activity_title_footer = (TextView) findViewById(R.id.knock_code_activity_title_footer);
 
-        kc_button_cancel.setText("Retry");
+        kc_button_cancel.setText("Reset");
 
         addListenerOnButton();
 
@@ -104,8 +104,11 @@ public class KnockCodeSettings extends Activity implements Constants{
 
         kc_button_cancel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                knock_code_pattern_input = "";
+                knock_code_pattern_input = knock_code_pattern_buffer = "";
                 knock_code_user_input.setText(knock_code_pattern_input);
+                knock_code_current_pattern_input = false;
+                knock_code_activity_title.setText("Enter current Knock Code:");
+                knock_code_activity_title_footer.setText("Default code is 1234");
             }
         });
 
