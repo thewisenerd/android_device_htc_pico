@@ -142,7 +142,7 @@ public class KnockCodeSettings extends Activity implements Constants{
                             .setMessage("Knock Code updated successfully!")
                             .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    ;
+                                    finish();
                                 }
                             })
                             .setIcon(android.R.drawable.ic_dialog_info)
