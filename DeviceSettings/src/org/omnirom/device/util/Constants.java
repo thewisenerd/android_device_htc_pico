@@ -39,6 +39,8 @@ public interface Constants {
     static final String KEY_MAIN_KNOCK_CODE_PATTERN_PATH = "/sys/android_touch/knock_code/pattern";
     static final String KEY_MAIN_KNOCK_CODE_ROTATE_PATH = "/sys/android_touch/knock_code/enable_rotate";
 
+    static final String KEY_MAIN_KNOCK_CODE_KEYGUARD_STATUS = "/sys/android_touch/knock_code/keyguard_status";
+
     static final String KEY_MAIN_DARK_THEME = "dark_theme_enabled";
 
 }
