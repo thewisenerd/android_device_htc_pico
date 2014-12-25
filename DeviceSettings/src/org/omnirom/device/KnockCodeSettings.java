@@ -128,6 +128,13 @@ public class KnockCodeSettings extends Activity implements Constants{
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
+
+                    knock_code_pattern_input = knock_code_pattern_buffer = "";
+                    knock_code_user_input.setText(knock_code_pattern_input);
+                    knock_code_current_pattern_input = false;
+                    knock_code_activity_title.setText("Enter current Knock Code:");
+                    knock_code_activity_title_footer.setText("Default code is 1234");
+
                     return;
                 }
 
@@ -137,6 +144,12 @@ public class KnockCodeSettings extends Activity implements Constants{
                     //Log.i(TAG, (knock_code_pattern_buffer + knock_code_pattern_input));
                     ret = Helpers.readOneLine(KEY_MAIN_KNOCK_CODE_PATTERN_PATH);
                     if (ret.equals("true")) {
+
+                        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        SharedPreferences.Editor editor = sharedPrefs.edit();
+                        editor.putString(DeviceSettings.KEY_MAIN_KNOCK_CODE_PREF, knock_code_pattern_input);
+                        editor.commit();
+
                         new AlertDialog.Builder(KnockCodeSettings.this)
                             .setTitle("Info")
                             .setMessage("Knock Code updated successfully!")

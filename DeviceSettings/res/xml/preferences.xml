@@ -118,6 +118,12 @@
     <!-- Knock Code -->
 
     <PreferenceCategory android:title="Knock Code™" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="knock_code_enabled"
+            android:summary="is disabled"
+            android:title="Knock Code" />
+
         <Preference
             android:key="pref_knock_code_set"
             android:title="Knock Code"
@@ -127,6 +133,13 @@
                 android:targetPackage="org.omnirom.device"
                 android:targetClass="org.omnirom.device.KnockCodeSettings" />
         </Preference>
+
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="knock_code_enable_rotate"
+            android:summary="is disabled"
+            android:title="Knock Code (Rotate)" />
     </PreferenceCategory>
 
     <!-- theme -->

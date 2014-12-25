@@ -90,5 +90,29 @@ public class BootReceiver extends BroadcastReceiver implements Constants {
         Helpers.writeOneLine(KEY_MAIN_SOUND_BOOST_PATH,
                 Integer.toString(sharedPrefs.getInt(DeviceSettings.KEY_MAIN_SOUND_BOOST, 0)));
 
+        Log.i(TAG, "restoring knock code toggle");
+        if (sharedPrefs.getBoolean(DeviceSettings.KEY_MAIN_KNOCK_CODE, false)) {
+            Log.i(TAG, "restoring Knock Code toggle 1");
+            Helpers.writeOneLine(KEY_MAIN_KNOCK_CODE_SWITCH_PATH, "1");
+        } else {
+            Log.i(TAG, "restoring Knock Code toggle 0");
+            Helpers.writeOneLine(KEY_MAIN_KNOCK_CODE_SWITCH_PATH, "0");
+        }
+
+        Log.i(TAG, "restoring knock code pattern." + sharedPrefs.getString(DeviceSettings.KEY_MAIN_KNOCK_CODE_PREF, "1234"));
+        Helpers.writeOneLine(
+            KEY_MAIN_KNOCK_CODE_PATTERN_PATH,
+            (("1234" + (sharedPrefs.getString(DeviceSettings.KEY_MAIN_KNOCK_CODE_PREF, "1234"))
+                     + System.getProperty("line.separator"))));
+
+        Log.i(TAG, "restoring knock code (rotate) toggle");
+        if (sharedPrefs.getBoolean(DeviceSettings.KEY_MAIN_KNOCK_CODE_ROTATE_PREF, false)) {
+            Log.i(TAG, "restoring Knock Code (rotate) toggle 1");
+            Helpers.writeOneLine(KEY_MAIN_KNOCK_CODE_ROTATE_PATH, "1");
+        } else {
+            Log.i(TAG, "restoring Knock Code (rotate) toggle 0");
+            Helpers.writeOneLine(KEY_MAIN_KNOCK_CODE_ROTATE_PATH, "0");
+        }
+
     }
 }

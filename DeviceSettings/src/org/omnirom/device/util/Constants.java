@@ -32,9 +32,12 @@ public interface Constants {
     static final String KEY_MAIN_SOUND_BOOST = "sound_boost";
     static final String KEY_MAIN_SOUND_BOOST_PATH = "/sys/sound_control/volume_boost";
 
+    static final String KEY_MAIN_KNOCK_CODE = "knock_code_enabled";
     static final String KEY_MAIN_KNOCK_CODE_PREF = "pref_knock_code_set";
+    static final String KEY_MAIN_KNOCK_CODE_ROTATE_PREF = "knock_code_enable_rotate";
     static final String KEY_MAIN_KNOCK_CODE_SWITCH_PATH = "/sys/android_touch/knock_code/enable";
     static final String KEY_MAIN_KNOCK_CODE_PATTERN_PATH = "/sys/android_touch/knock_code/pattern";
+    static final String KEY_MAIN_KNOCK_CODE_ROTATE_PATH = "/sys/android_touch/knock_code/enable_rotate";
 
     static final String KEY_MAIN_DARK_THEME = "dark_theme_enabled";
 

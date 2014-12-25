@@ -39,6 +39,9 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
 
     private SeekBarPreference  mSoundBoost;
 
+    private CheckBoxPreference mKnockCodePref;
+    private CheckBoxPreference mKnockCodeRotatePref;
+
     private CheckBoxPreference mDarkThemePref;
 
     @Override
@@ -115,6 +118,23 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
 
         Helpers.writeOneLine(KEY_MAIN_SOUND_BOOST_PATH,
                 Integer.toString(sharedPrefs.getInt(DeviceSettings.KEY_MAIN_SOUND_BOOST, 0)));
+
+        if (sharedPrefs.getBoolean(DeviceSettings.KEY_MAIN_KNOCK_CODE, false)) {
+            Helpers.writeOneLine(KEY_MAIN_KNOCK_CODE_SWITCH_PATH, "1");
+        } else {
+            Helpers.writeOneLine(KEY_MAIN_KNOCK_CODE_SWITCH_PATH, "0");
+        }
+
+        Helpers.writeOneLine(
+            KEY_MAIN_KNOCK_CODE_PATTERN_PATH,
+            (("1234" + (sharedPrefs.getString(DeviceSettings.KEY_MAIN_KNOCK_CODE_PREF, "1234"))
+                     + System.getProperty("line.separator"))));
+
+        if (sharedPrefs.getBoolean(DeviceSettings.KEY_MAIN_KNOCK_CODE_ROTATE_PREF, false)) {
+            Helpers.writeOneLine(KEY_MAIN_KNOCK_CODE_ROTATE_PATH, "1");
+        } else {
+            Helpers.writeOneLine(KEY_MAIN_KNOCK_CODE_ROTATE_PATH, "0");
+        }
 
         /* Sweep2Wake */
         /*  main toggle */
@@ -202,6 +222,22 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
         mSoundBoost.setValue(Integer.parseInt(ret));
         mSoundBoost.setOnPreferenceChangeListener(this);
 
+        mKnockCodePref = (CheckBoxPreference) findPreference(KEY_MAIN_KNOCK_CODE);
+        ret = Helpers.readOneLine(KEY_MAIN_KNOCK_CODE_SWITCH_PATH);
+        if (ret.equals("1"))
+            mKnockCodePref.setChecked(true);
+        else
+            mKnockCodePref.setChecked(false);
+        mKnockCodePref.setOnPreferenceChangeListener(this);
+
+        mKnockCodeRotatePref = (CheckBoxPreference) findPreference(KEY_MAIN_KNOCK_CODE_ROTATE_PREF);
+        ret = Helpers.readOneLine(KEY_MAIN_KNOCK_CODE_ROTATE_PATH);
+        if (ret.equals("1"))
+            mKnockCodeRotatePref.setChecked(true);
+        else
+            mKnockCodeRotatePref.setChecked(false);
+        mKnockCodeRotatePref.setOnPreferenceChangeListener(this);
+
         mDarkThemePref = (CheckBoxPreference) findPreference(KEY_MAIN_DARK_THEME);
         if (getThemeResId()  == android.R.style.Theme_Holo) {
             mDarkThemePref.setChecked(true);
@@ -210,13 +246,14 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
         }
         mDarkThemePref.setOnPreferenceChangeListener(this);
 
-
         mS2WPref.setSummary("is "+((mS2WPref.isChecked())?"enabled":"disabled"));
         mS2WS2SPref.setSummary("is "+((mS2WS2SPref.isChecked())?"enabled":"disabled"));
         mDT2WPref.setSummary("is "+((mDT2WPref.isChecked())?"enabled":"disabled"));
         mPocketModPref.setSummary("is "+((mPocketModPref.isChecked())?"enabled":"disabled"));
         mBLNPref.setSummary("is "+((mBLNPref.isChecked())?"enabled":"disabled"));
         mFastChargePref.setSummary("is "+((mFastChargePref.isChecked())?"enabled":"disabled"));
+        mKnockCodePref.setSummary("is "+((mKnockCodePref.isChecked())?"enabled":"disabled"));
+        mKnockCodeRotatePref.setSummary("is "+((mKnockCodeRotatePref.isChecked())?"enabled":"disabled"));
         mDarkThemePref.setSummary("is "+((mDarkThemePref.isChecked())?"enabled":"disabled"));
 
     }
@@ -501,6 +538,82 @@ public class DeviceSettings extends PreferenceActivity implements Preference.OnP
                 return true;
             } else {
                 Log.w(TAG, "user fails to set sound boost val");
+                return false;
+            }
+        } else if (preference == mKnockCodePref) {
+            if ( ((Boolean)o).booleanValue() == true ) {
+                Log.i(TAG, "user attempts to enable Knock Code");
+                bool = Helpers.writeOneLine(KEY_MAIN_KNOCK_CODE_SWITCH_PATH, "1");
+                if ( bool == true ) {
+                    preference.setSummary("is enabled");
+                    Log.i(TAG, "user enables Knock Code");
+                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    editor.putBoolean(DeviceSettings.KEY_MAIN_KNOCK_CODE, true);
+                    editor.commit();
+                    return true;
+                } else {
+                    preference.setSummary("is invalid");
+                    Log.w(TAG, "user fails to enable Knock Code");
+                    return false;
+                }
+            } else if ( ((Boolean)o).booleanValue() == false ) {
+                Log.i(TAG, "user attempts to disable Knock Code");
+                bool = Helpers.writeOneLine(KEY_MAIN_KNOCK_CODE_SWITCH_PATH, "0");
+                if ( bool == true ) {
+                    preference.setSummary("is disabled");
+                    Log.i(TAG, "user disables Knock Code");
+                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    editor.putBoolean(DeviceSettings.KEY_MAIN_KNOCK_CODE, false);
+                    editor.commit();
+                    return true;
+                } else {
+                    preference.setSummary("is invalid");
+                    Log.w(TAG, "user fails to disable Knock Code");
+                    return false;
+                }
+            } else {
+                Log.i(TAG, "Knock Code: unhandled exception on Knock Code toggle");
+                preference.setSummary("is invalid");
+                return false;
+            }
+        } else if (preference == mKnockCodeRotatePref) {
+            if ( ((Boolean)o).booleanValue() == true ) {
+                Log.i(TAG, "user attempts to enable Knock Code (Rotate)");
+                bool = Helpers.writeOneLine(KEY_MAIN_KNOCK_CODE_ROTATE_PATH, "1");
+                if ( bool == true ) {
+                    preference.setSummary("is enabled");
+                    Log.i(TAG, "user enables Knock Code (Rotate)");
+                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    editor.putBoolean(DeviceSettings.KEY_MAIN_KNOCK_CODE_ROTATE_PREF, true);
+                    editor.commit();
+                    return true;
+                } else {
+                    preference.setSummary("is invalid");
+                    Log.w(TAG, "user fails to enable Knock Code (Rotate)");
+                    return false;
+                }
+            } else if ( ((Boolean)o).booleanValue() == false ) {
+                Log.i(TAG, "user attempts to disable Knock Code (Rotate)");
+                bool = Helpers.writeOneLine(KEY_MAIN_KNOCK_CODE_ROTATE_PATH, "0");
+                if ( bool == true ) {
+                    preference.setSummary("is disabled");
+                    Log.i(TAG, "user disables Knock Code (Rotate)");
+                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    editor.putBoolean(DeviceSettings.KEY_MAIN_KNOCK_CODE_ROTATE_PREF, false);
+                    editor.commit();
+                    return true;
+                } else {
+                    preference.setSummary("is invalid");
+                    Log.w(TAG, "user fails to disable Knock Code (Rotate)");
+                    return false;
+                }
+            } else {
+                Log.i(TAG, "Knock Code (Rotate): unhandled exception on Knock Code (Rotate) toggle");
+                preference.setSummary("is invalid");
                 return false;
             }
         } else if (preference == mDarkThemePref ) {
