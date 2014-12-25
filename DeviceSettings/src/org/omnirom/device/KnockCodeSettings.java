@@ -26,6 +26,11 @@ public class KnockCodeSettings extends Activity implements Constants{
     private Button   kc_button4;
     private TextView knock_code_user_input;
 
+    private Button   kc_button_continue;
+    private Button   kc_button_cancel;
+
+    private String   knock_code_pattern_input = "";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -44,7 +49,12 @@ public class KnockCodeSettings extends Activity implements Constants{
         kc_button3 = (Button) findViewById(R.id.kc_button3);
         kc_button4 = (Button) findViewById(R.id.kc_button4);
 
+        kc_button_continue = (Button) findViewById(R.id.kc_button_continue);
+        kc_button_cancel   = (Button) findViewById(R.id.kc_button_cancel);
+
         knock_code_user_input = (TextView) findViewById(R.id.knock_code_user_input);
+
+        kc_button_cancel.setText("Retry");
 
         addListenerOnButton();
 
@@ -54,13 +64,38 @@ public class KnockCodeSettings extends Activity implements Constants{
     public void addListenerOnButton() {
 
         kc_button1.setOnClickListener(new View.OnClickListener() {
-
             public void onClick(View v) {
-
-              knock_code_user_input.setText("1");
-
+              knock_code_pattern_input += "1";
+              knock_code_user_input.setText(knock_code_pattern_input);
             }
+        });
 
+        kc_button2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+              knock_code_pattern_input += "2";
+              knock_code_user_input.setText(knock_code_pattern_input);
+            }
+        });
+
+        kc_button3.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+              knock_code_pattern_input += "3";
+              knock_code_user_input.setText(knock_code_pattern_input);
+            }
+        });
+
+        kc_button4.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+              knock_code_pattern_input += "4";
+              knock_code_user_input.setText(knock_code_pattern_input);
+            }
+        });
+
+        kc_button_cancel.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                knock_code_pattern_input = "";
+                knock_code_user_input.setText(knock_code_pattern_input);
+            }
         });
 
     }
